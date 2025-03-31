@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Tree View -->
+    <record id="view_sports_country_tree" model="ir.ui.view">
+        <field name="name">sports.country.tree</field>
+        <field name="model">sports.country</field>
+        <field name="arch" type="xml">
+            <tree string="Countries" delete="false" create="false" duplicate="false">
+                <field name="name"/>
+                <field name="code"/>
+                <field name="flag" widget="image_url" options="{'size': [100, 100]}"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="view_sports_country_form" model="ir.ui.view">
+        <field name="name">sports.country.form</field>
+        <field name="model">sports.country</field>
+        <field name="arch" type="xml">
+            <form string="Country" create="false" delete="false" duplicate="false">
+                <sheet>
+                    <!-- Título con dos columnas: Nombre a la izquierda, Bandera a la derecha -->
+                    <group>
+                        <group>
+                            <field name="name" placeholder="Enter Country Name"/>
+                        </group>
+                        <group>
+                            <field name="flag" widget="image_url" options="{'size': [175, 150]}"/>
+                        </group>
+                    </group>
+
+                    <!-- Pestañas -->
+                    <notebook>
+                        <!-- Pestaña de Información General -->
+                        <page string="General Information">
+                            <group>
+                                <group>
+                                    <field name="code" string="Country Code"/>
+                                    <field name="session_id" options="{'no_create': True, 'no_open': True}"/>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <!-- Aquí se agrega el chatter para el tracking de session_id -->
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Search View -->
+    <record id="view_sports_country_search" model="ir.ui.view">
+        <field name="name">sports.country.search</field>
+        <field name="model">sports.country</field>
+        <field name="arch" type="xml">
+            <search string="Search Countries">
+                <field name="name"/>
+                <field name="code"/>
+                <field name="flag"/>
+                <!-- Filtro para países con sesión -->
+                <filter string="With Session" name="filter_with_session"
+                domain="[('session_id', '!=', False)]"/>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_sports_country" model="ir.actions.act_window">
+        <field name="name">Countries</field>
+        <field name="res_model">sports.country</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No countries found!
+            </p>
+            <p>
+                To import countries, go to Settings > Import Countries and use the import wizard to download countries from the sports API.
+            </p>
+        </field>
+    </record>
+
+    <menuitem
+        id="sports_country_menu"
+        name="Countries"
+        action="action_sports_country"
+        parent="sports_betting_menu"
+        sequence="10"/>
+
+</odoo>

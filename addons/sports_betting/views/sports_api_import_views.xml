@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Wizard para importar países -->
+    <record id="view_sports_api_import" model="ir.ui.view">
+        <field name="name">sports.api.import.countries.form</field>
+        <field name="model">sports.api.import</field>
+        <field name="arch" type="xml">
+            <form string="Import Countries">
+                <div class="alert alert-info" role="alert">
+                    <h3 class="alert-heading"><i class="fa fa-info-circle"/> Import Information</h3>
+                    <p>This wizard will import countries data from the sports API.</p>
+                    <ul>
+                        <li>Country names and codes will be imported</li>
+                        <li>Flag images will be automatically downloaded</li>
+                        <li>Existing countries will be updated</li>
+                    </ul>
+                </div>
+                <footer>
+                    <button name="fetch_countries_from_api"
+                            type="object"
+                            string="Import Countries"
+                            class="btn-primary"
+                            icon="fa-download"/>
+                    <button special="cancel"
+                            string="Cancel"
+                            class="btn-secondary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_sports_api_import" model="ir.actions.act_window">
+        <field name="name">Import Countries</field>
+        <field name="res_model">sports.api.import</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_sports_api_import"/>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="menu_sports_api_import"
+        name="Import Countries"
+        action="action_sports_api_import"
+        parent="sports_betting_settings_menu"
+        sequence="10"/>
+
+    <!-- Wizard para importar ligas -->
+    <record id="view_sports_league_import" model="ir.ui.view">
+        <field name="name">sports.api.import.leagues.form</field>
+        <field name="model">sports.api.import</field>
+        <field name="arch" type="xml">
+            <form string="Import Leagues">
+                <div class="alert alert-warning" role="alert">
+                    <h3 class="alert-heading"><i class="fa fa-info-circle"/> Import Leagues</h3>
+                    <p>This wizard will import leagues data from the sports API.</p>
+                    <ul>
+                        <li>Leagues for active sessions will be imported</li>
+                        <li>Only countries with active sessions will be included</li>
+                        <li>Existing leagues will be updated</li>
+                    </ul>
+                </div>
+                <footer>
+                    <button name="fetch_leagues_from_api"
+                            type="object"
+                            string="Import Leagues"
+                            class="btn-primary"
+                            icon="fa-download"/>
+                    <button special="cancel"
+                            string="Cancel"
+                            class="btn-secondary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_sports_league_import" model="ir.actions.act_window">
+        <field name="name">Import Leagues</field>
+        <field name="res_model">sports.api.import</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_sports_league_import"/>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="menu_sports_league_import"
+        name="Import Leagues"
+        action="action_sports_league_import"
+        parent="sports_betting_settings_menu"
+        sequence="20"/>
+
+    <!-- Wizard para importar equipos -->
+    <record id="view_sports_team_import" model="ir.ui.view">
+        <field name="name">sports.api.import.teams.form</field>
+        <field name="model">sports.api.import</field>
+        <field name="arch" type="xml">
+            <form string="Import Teams">
+                <div class="alert alert-info" role="alert">
+                    <h3 class="alert-heading"><i class="fa fa-info-circle"/> Import Teams</h3>
+                    <p>This wizard will import teams data from the sports API.</p>
+                    <ul>
+                        <li>Teams from followed leagues will be imported</li>
+                        <li>Only active teams will be included</li>
+                        <li>Match statistics and odds will be updated</li>
+                    </ul>
+                </div>
+                <footer>
+                    <button name="fetch_teams_from_api"
+                            type="object"
+                            string="Import Teams"
+                            class="btn-primary"
+                            icon="fa-download"/>
+                    <button special="cancel"
+                            string="Cancel"
+                            class="btn-secondary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_sports_team_import" model="ir.actions.act_window">
+        <field name="name">Import Teams</field>
+        <field name="res_model">sports.api.import</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_sports_team_import"/>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="menu_sports_team_import"
+        name="Import Teams"
+        action="action_sports_team_import"
+        parent="sports_betting_settings_menu"
+        sequence="30"/>
+</odoo>

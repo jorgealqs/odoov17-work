@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Tree View -->
+    <record id="view_sports_league_tree" model="ir.ui.view">
+        <field name="name">sports.league.tree</field>
+        <field name="model">sports.league</field>
+        <field name="arch" type="xml">
+            <tree string="Leagues" delete="false" create="false" duplicate="false" decoration-success="follow" decoration-bf="follow">
+                <field name="name"/>
+                <field name="country_id"/>
+                <field name="session_id"/>
+                <field name="logo" widget="image_url" options="{'size': [100, 75]}"/>
+                <field name="league_id_api" optional="hide"/>
+                <field name="follow" optional="hide" widget="boolean_toggle"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="view_sports_league_form" model="ir.ui.view">
+        <field name="name">sports.league.form</field>
+        <field name="model">sports.league</field>
+        <field name="arch" type="xml">
+            <form string="League" delete="false" create="false" duplicate="false">
+                <sheet>
+                    <!-- Encabezado con nombre de la liga y logo -->
+                    <group>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" readonly="1"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <div style="text-align: center; margin-bottom: 10px;">
+                                <field name="logo" widget="image_url" options="{'size': [100, 100]}"/>
+                            </div>
+                        </group>
+                    </group>
+
+                    <!-- Pestañas con la información -->
+                    <notebook>
+                        <page string="General Information">
+                            <group>
+                                <group>
+                                    <field name="country_id" readonly="1" options="{'no_create': true, 'no_open': true}"/>
+                                    <field name="session_id" readonly="1" options="{'no_create': true, 'no_open': true}"/>
+                                </group>
+                                <group>
+                                    <field name="league_id_api" readonly="1"/>
+                                    <field name="follow" widget="boolean_toggle"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Teams">
+                            <group>
+                                <field name="team_ids" readonly="1" options="{'no_create': true, 'no_open': true}" string="">
+                                    <tree>
+                                        <field name="name" />
+                                        <field name="logo" widget="image_url" options="{'size': [50, 50]}"/>
+                                    </tree>
+                                    <form>
+                                        <field name="name" />
+                                        <field name="logo" widget="image_url" options="{'size': [50, 50]}"/>
+                                    </form>
+                                </field>
+                            </group>
+                        </page>
+
+                        <page string="Extra Details">
+                            <group>
+                                <group>
+                                    <field name="create_uid" invisible="1"/>
+                                    <field name="create_date" invisible="1"/>
+                                    <field name="write_uid" invisible="1"/>
+                                    <field name="write_date" invisible="1"/>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Search View -->
+    <record id="view_sports_league_search" model="ir.ui.view">
+        <field name="name">sports.league.search</field>
+        <field name="model">sports.league</field>
+        <field name="arch" type="xml">
+            <search string="Search Leagues">
+                <field name="name"/>
+                <filter name="followed" string="Followed Leagues" domain="[('follow', '=', True)]"/>
+                <group expand="0" string="Group By">
+                    <filter name="country" string="Country" context="{'group_by': 'country_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_sports_league" model="ir.actions.act_window">
+        <field name="name">Leagues</field>
+        <field name="res_model">sports.league</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No Leagues Available
+            </p>
+            <p>
+                To get started, please download leagues data from Settings > Import Leagues
+            </p>
+        </field>
+    </record>
+
+    <!-- Menu Item (placed under Countries) -->
+    <menuitem
+        id="sports_league_menu"
+        name="Leagues"
+        action="action_sports_league"
+        parent="sports_betting_menu"
+        sequence="20"/>
+
+</odoo>
