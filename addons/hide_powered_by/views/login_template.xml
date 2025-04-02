@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <template id="hide_powered_by_odoo" inherit_id="web.login_layout">
+        <xpath expr="//div[@class='card-body']//div[last()]" position="replace">
+            <div class="text-center small mt-2 pt-2 login--footer" t-if="not disable_footer">
+                <div class="oe_login_footer text-center" style="font-size: 14px; color: #666;">
+                    <span>© 2024 - Creative Tech | All Rights Reserved</span>
+                </div>
+            </div>
+        </xpath>
+    </template>
+</odoo>
