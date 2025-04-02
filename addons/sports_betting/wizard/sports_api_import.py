@@ -1,6 +1,7 @@
 import logging
 from odoo import _, models, exceptions  # type: ignore
 from ..models.api_utils import APIFootballHelper
+from datetime import datetime
 
 _logger = logging.getLogger(__name__)
 
@@ -130,10 +131,7 @@ class SportsAPIImport(models.TransientModel):
             }
         }
 
-    def fetch_teams_from_api(self):
-        """Fetch teams data from API Football for each followed league."""
-        _logger.info("\n\nStarting teams import from API\n\n")
-
+    def _create_fetch_teams_from_api(self):
         leagues_followed = self.env[
             'sports.league'
         ].search([('follow', '=', True)])
@@ -206,4 +204,141 @@ class SportsAPIImport(models.TransientModel):
                             f"(ID: {team_data.get('id')})"
                         )
 
+    def _create_fetch_standings_from_api(self):
+        leagues_followed = self.env[
+            'sports.league'
+        ].search([('follow', '=', True)])
+
+        if not leagues_followed:
+            raise exceptions.UserError(
+                _("No followed leagues found to import standings.")
+            )
+
+        for league in leagues_followed:
+            params = {
+                'league': league.league_id_api,
+                'season': league.session_id.name
+            }
+            data = APIFootballHelper.fetch_api_data(
+                '/standings', params=params
+            )
+
+            if "response" in data:
+                for response in data["response"]:
+                    standings_data = response["league"]["standings"]
+
+                    for standing in standings_data:
+                        for team in standing:
+                            team_data = team["team"]
+                            team_stats_overall = team["all"]
+                            team_stats_home = team["home"]
+                            team_stats_away = team["away"]
+
+                            team_record = self.env['sports.team'].search([
+                                ('team_id_api', '=', team_data["id"]),
+                                ('league_id', '=', league.id),
+                                ('session_id', '=', league.session_id.id)
+                            ], limit=1)
+
+                            if not team_record:
+                                _logger.warning(
+                                    f"Team {team_data['name']} "
+                                    f"not found in Odoo. Skipping..."
+                                )
+                                continue
+
+                            # Convertir la fecha ISO 8601 a formato de Odoo
+                            update_date_str = team.get("update")
+                            update_date = datetime.strptime(
+                                update_date_str[:19], "%Y-%m-%dT%H:%M:%S"
+                            ) if update_date_str else False
+
+                            standings_vals = {
+                                "rank": team["rank"],
+                                "team_id": team_record.id,
+                                "points": team["points"],
+                                "goals_diff": team["goalsDiff"],
+                                "group": team.get("group"),
+                                "form": team.get("form"),
+                                "status": team.get("status"),
+                                "description": team.get("description"),
+                                "update_date": update_date,
+                            }
+
+                            # Buscar si existe un standing para este equipo
+                            # en la misma fecha
+                            existing_standing = self.env[
+                                'sports.standings'
+                            ].search([
+                                ('team_id', '=', team_record.id),
+                                ('update_date', '=', update_date),
+                                ('group', '=', team.get('group'))
+                            ], limit=1)
+
+                            if existing_standing:
+                                # Actualizar el standing existente
+                                existing_standing.write(standings_vals)
+                                standings_record = existing_standing
+                                _logger.info(
+                                    f"Updated standings for "
+                                    f"{team_data['name']}"
+                                )
+                            else:
+                                # Crear nuevo standing
+                                standings_record = self.env[
+                                    'sports.standings'
+                                ].create(standings_vals)
+                                _logger.info(
+                                    f"Created new standings for "
+                                    f"{team_data['name']}"
+                                )
+
+                            stats_vals = [
+                                {
+                                    "standings_id": standings_record.id,
+                                    "type": stat_type,
+                                    "played": stat_data["played"],
+                                    "win": stat_data["win"],
+                                    "draw": stat_data["draw"],
+                                    "lose": stat_data["lose"],
+                                    "goals_for": stat_data["goals"]["for"],
+                                    "goals_against": stat_data[
+                                        "goals"
+                                    ]["against"],
+                                } for stat_type, stat_data in [
+                                    ("overall", team_stats_overall),
+                                    ("home", team_stats_home),
+                                    ("away", team_stats_away)
+                                ]
+                            ]
+
+                            # Actualizar o crear estadísticas
+                            for stat_val in stats_vals:
+                                existing_stat = self.env[
+                                    'sports.standings.stats'
+                                ].search([
+                                    ('standings_id', '=', standings_record.id),
+                                    ('type', '=', stat_val['type'])
+                                ], limit=1)
+
+                                if existing_stat:
+                                    existing_stat.write(stat_val)
+                                    _logger.info(
+                                        f"Updated {stat_val['type']} "
+                                        f"stats for {team_data['name']}"
+                                    )
+                                else:
+                                    self.env[
+                                        'sports.standings.stats'
+                                    ].create(stat_val)
+                                    _logger.info(
+                                        f"Created {stat_val['type']} stats "
+                                        f"for {team_data['name']}"
+                                    )
+
+    def fetch_teams_from_api(self):
+        """Fetch teams data from API Football for each followed league."""
+        _logger.info("\n\nStarting teams import from API\n\n")
+        self._create_fetch_teams_from_api()
+        self._create_fetch_standings_from_api()
         _logger.info("Teams import finished")
