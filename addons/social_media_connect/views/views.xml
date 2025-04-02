@@ -1,0 +1,15 @@
+<odoo>
+  <data>
+
+    <!-- Top menu item -->
+
+    <menuitem name="Connect Network" id="social_media_menu_root"/>
+
+    <!-- menu categories -->
+
+    <menuitem name="Networking" id="social_medial_menu_1" parent="social_media_menu_root" sequence="10"/>
+
+    <menuitem name="Settings" id="social_settings_menu" parent="social_media_menu_root" sequence="20"/>
+
+  </data>
+</odoo>

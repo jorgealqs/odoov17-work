@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+
+    <!-- Action and Menu -->
+    <menuitem id="menu_cv_root" name="Curriculums"/>
+
+    <menuitem id="menu_cv" name="CVs" parent="menu_cv_root" action="cv_manager_action"/>
+
+</odoo>
