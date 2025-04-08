@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+    <t t-name="sports_betting.Dashboard">
+        <Layout display="display" className="'o_dashboard h-100'">
+
+            <!-- Botones superiores -->
+            <t t-set-slot="layout-buttons">
+                <button class="btn btn-primary" t-on-click="openCountries">Countries</button>
+                <button class="btn btn-primary" t-on-click="openLeagues">Leagues</button>
+                <button class="btn btn-primary" t-on-click="openTeams">Teams</button>
+            </t>
+
+            <!-- Configuración -->
+            <t t-set-slot="control-panel-additional-actions">
+                <button t-on-click="openConfiguration" class="btn p-0 ms-1 border-0">
+                    <i class="fa fa-cog"></i>
+                </button>
+            </t>
+
+            <!-- Contenido principal -->
+            <div class="d-flex flex-wrap gap-4 p-3 w-100">
+
+                <!-- Mostrar solo si los datos están listos -->
+                <t t-if="isLoaded">
+
+                    <!-- Componente de estadísticas -->
+                    <DashboardItem title="'Countries in/without session'">
+                        <!-- Pie Chart -->
+                        <div class="text-center mb-3">
+                            <PieChart label="'Session by country'" data="chartData"/>
+                        </div>
+
+                        <!-- Lista de países con sesión -->
+                        <div class="text-center">
+                            <h5 class="mb-2 text-success">In session:</h5>
+                            <p>
+                                <t t-esc="inSessionCountries"/>
+                            </p>
+                        </div>
+                    </DashboardItem>
+                    <DashboardItem title="'Leagues'" size="2">
+                        <!-- Pie Chart -->
+                        <div class="text-center mb-3">
+                            <PieChart label="'League'" data="chartDataLeague"/>
+                        </div>
+
+                        <!-- Lista de países con sesión -->
+                        <div class="text-center">
+                            <h5 class="mb-2 text-success">Following:</h5>
+                            <p>
+                                <t t-esc="inSessionLeagues"/>
+                            </p>
+                        </div>
+                    </DashboardItem>
+                </t>
+            </div>
+        </Layout>
+    </t>
+</templates>

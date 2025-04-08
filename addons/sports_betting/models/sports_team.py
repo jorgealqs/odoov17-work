@@ -86,12 +86,17 @@ class SportsTeam(models.Model):
     def _compute_standings_data(self):
         """Compute both rank and points from latest standings data."""
         for team in self:
-            latest_standing = team.standings_id.filtered(
-                lambda s: s.team_id == team
-            ).sorted(key=lambda r: r.update_date, reverse=True)[:1]
-            # Obtener el más reciente
+            # Primero filtramos los standings que tienen update_date válido
+            valid_standings = team.standings_id.filtered(
+                lambda s: s.team_id == team and s.update_date
+            )
 
-            if latest_standing:
+            if valid_standings:
+                latest_standing = valid_standings.sorted(
+                    key=lambda r: r.update_date,
+                    reverse=True
+                )[0]
+
                 team.points = latest_standing.points
                 team.rank = latest_standing.rank
                 team.goals_diff = latest_standing.goals_diff
@@ -105,11 +110,14 @@ class SportsTeam(models.Model):
                 team.goals_for = data.goals_for
                 team.goals_against = data.goals_against
             else:
+                # Si no hay standings válidos, establecer valores por defecto
                 team.points = 0
                 team.rank = 0
                 team.goals_diff = 0
                 team.played = 0
                 team.wins = 0
+                team.draws = 0
+                team.loses = 0
                 team.goals_for = 0
                 team.goals_against = 0
 

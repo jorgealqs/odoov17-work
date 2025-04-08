@@ -1,4 +1,5 @@
 import logging
+from typing import Dict, Any, Optional  # type: ignore
 from odoo import _, models, exceptions  # type: ignore
 from ..models.api_utils import APIFootballHelper
 from datetime import datetime
@@ -10,28 +11,30 @@ class SportsAPIImport(models.TransientModel):
     _name = 'sports.api.import'
     _description = 'Import Data from API Football'
 
-    def _create_country(self, name, code, flag):
-        """Crea un país solo si no existe previamente"""
-        country_model = self.env['sports.country']
+    def _create_country(self, name: str, code: str, flag: str) -> None:
+        """Create a country if it doesn't exist.
 
-        # Asegurar que el código no sea NULL
+        Args:
+            name: Country name
+            code: Country code
+            flag: URL to country flag
+        """
+        country_model = self.env['sports.country']
         if not code:
             _logger.warning(
-                "El país '%s' no tiene código, asignando uno por defecto.",
-                name
+                "Country '%s' has no code, assigning default", name
             )
-            # Ejemplo: "World" → "WORLD"
+            return
 
-        existing_country = country_model.search([('code', '=', code)], limit=1)
-        if not existing_country:
+        if not country_model.search([('code', '=', code)], limit=1):
             country_model.create({
                 'name': name,
                 'code': code,
                 'flag': flag
             })
-            _logger.info("País creado: %s (%s)", name, code)
+            _logger.info("Created country: %s (%s)", name, code)
         else:
-            _logger.info("País ya existente: %s (%s)", name, code)
+            _logger.debug("Country already exists: %s (%s)", name, code)
 
     def fetch_countries_from_api(self):
         """Llama a la API y crea los países en Odoo, incluyendo 'World'"""
@@ -51,90 +54,160 @@ class SportsAPIImport(models.TransientModel):
         _logger.info("Importación de países finalizada correctamente.")
         return {'type': 'ir.actions.act_window_close'}
 
-    def fetch_leagues_from_api(self):
-        """
-        Fetch leagues data from API Football only for countries with active
-        sessions.
-        If the league already exists, update it; otherwise, create a new one.
-        """
-        _logger.info("Starting leagues import from API")
+    def _get_leagues_to_fetch(
+        self,
+        season: Optional[str] = None,
+        code: Optional[str] = None
+    ) -> models.Model:
+        """Get leagues that should be fetched based on criteria.
 
-        # Obtener los países que tienen al menos una sesión activa
-        league_follow = self.env['sports.country'].search(
-            [('session_id', '!=', False)]
-        )
+        Args:
+            season: Optional season filter
+            code: Optional country code filter
 
-        if not league_follow:
+        Returns:
+            Record set of leagues to fetch
+
+        Raises:
+            exceptions.UserError: If no leagues are found
+        """
+        domain = []
+        if season and code:
+            domain = [('code', '=', code), ('session_id.name', '=', season)]
+        else:
+            domain = [('session_id', '!=', False)]
+
+        leagues = self.env['sports.country'].search(domain)
+        if not leagues:
             raise exceptions.UserError(
-                _(
-                    "At least one country must have an active session to fetch"
-                    " leagues."
-                )
+                _("No countries with active sessions found to fetch leagues.")
             )
+        return leagues
 
-        for country in league_follow:
-            params = {
-                'code': country.code,
-                'season': country.session_id.name,
-                'current': 'true'
-            }
-            data = APIFootballHelper.fetch_api_data('/leagues', params=params)
+    def _prepare_league_values(
+        self,
+        league_data: Dict[str, Any],
+        country_id: int, session_id: int
+    ) -> Dict[str, Any]:
+        """Prepare values for league creation/update.
 
-            if "response" in data:
-                for response in data["response"]:
-                    league = response["league"]
+        Args:
+            league_data: Raw league data from API
+            country_id: ID of related country
+            session_id: ID of related session
 
-                    league_vals = {
-                        "league_id_api": league["id"],
-                        "name": league["name"],
-                        "logo": league["logo"],
-                        "country_id": country.id,
-                        "session_id": country.session_id.id,
-                    }
-
-                    # Verificar si la liga ya existe
-                    existing_league = self.env['sports.league'].search([
-                        ('league_id_api', '=', league["id"]),
-                        ('session_id', '=', country.session_id.id)
-                    ], limit=1)
-
-                    if existing_league:
-                        # Si la liga ya existe, actualizar los datos
-                        existing_league.write(league_vals)
-                        _logger.info(
-                            "Updated League: %s (%s)", league["name"],
-                            league["id"]
-                        )
-                    else:
-                        # Si no existe, crear la nueva liga
-                        self.env['sports.league'].create(league_vals)
-                        _logger.info(
-                            "Created New League: %s (%s)",
-                            league["name"], league["id"]
-                        )
-
-        _logger.info("Leagues import finished")
+        Returns:
+            Dictionary with prepared values
+        """
         return {
-            'type': 'ir.actions.client',
-            'tag': 'display_notification',
-            'params': {
-                'title': _("Leagues Imported Successfully!"),
-                'message': _(
-                    "The leagues have been successfully fetched and updated."
-                ),
-                'sticky': False,
-                # False para que desaparezca después de unos segundos
-                'type': 'success',
-                # Tipo de mensaje (success, warning, danger, info)
-                'next': {'type': 'ir.actions.act_window_close'},
-                # Cierra la ventana
-            }
+            "league_id_api": league_data["id"],
+            "name": league_data["name"],
+            "logo": league_data["logo"],
+            "country_id": country_id,
+            "session_id": session_id,
         }
 
-    def _create_fetch_teams_from_api(self):
-        leagues_followed = self.env[
-            'sports.league'
-        ].search([('follow', '=', True)])
+    def _create_or_update_league(
+        self,
+        league_vals: Dict[str, Any],
+        session_id: int
+    ) -> None:
+        """Create or update a league record.
+
+        Args:
+            league_vals: Prepared league values
+            session_id: ID of related session
+        """
+        league_model = self.env['sports.league']
+        existing_league = league_model.search([
+            ('league_id_api', '=', league_vals["league_id_api"]),
+            ('session_id', '=', session_id)
+        ], limit=1)
+
+        if existing_league:
+            existing_league.write(league_vals)
+            _logger.info(
+                "Updated League: %s (%s)",
+                league_vals["name"],
+                league_vals["league_id_api"]
+            )
+        else:
+            league_model.create(league_vals)
+            _logger.info(
+                "Created New League: %s (%s)",
+                league_vals["name"],
+                league_vals["league_id_api"]
+            )
+
+    def fetch_leagues_from_api(self, **kwargs) -> Dict[str, Any]:
+        """
+            Fetch leagues data from API Football for countries with active
+            sessions.
+        """
+        try:
+            leagues = self._get_leagues_to_fetch(
+                kwargs.get('season'),
+                kwargs.get('code')
+            )
+
+            for country in leagues:
+                data = APIFootballHelper.fetch_api_data('/leagues', params={
+                    'code': country.code,
+                    'season': country.session_id.name,
+                    'current': 'true'
+                })
+
+                if "response" in data:
+                    for response in data["response"]:
+                        league_vals = self._prepare_league_values(
+                            response["league"],
+                            country.id,
+                            country.session_id.id
+                        )
+                        self._create_or_update_league(
+                            league_vals, country.session_id.id
+                        )
+
+            return {
+                'type': 'ir.actions.client',
+                'tag': 'display_notification',
+                'params': {
+                    'title': _("Leagues Imported Successfully!"),
+                    'message': _(
+                        "The leagues have been successfully fetched and "
+                        "updated."
+                    ),
+                    'sticky': False,
+                    'type': 'success',
+                    'next': {'type': 'ir.actions.act_window_close'},
+                }
+            }
+
+        except Exception as e:
+            _logger.error("Error fetching leagues: %s", str(e))
+            raise exceptions.UserError(
+                _("Failed to fetch leagues: %s") % str(e)
+            )
+
+    def _create_fetch_teams_from_api(self, *args, **kwargs):
+        if kwargs:
+            league_id = kwargs.get('league')
+            season = kwargs.get('season')
+            leagues_followed = self.env[
+                'sports.league'
+            ].search(
+                [
+                    ('league_id_api', '=', league_id),
+                    ('session_id.name', '=', season)
+                ]
+            )
+            _logger.info(
+                f"\n\n league: {league_id} season: {season} \n\n"
+            )
+        else:
+            leagues_followed = self.env[
+                'sports.league'
+            ].search([('follow', '=', True)])
 
         if not leagues_followed:
             raise exceptions.UserError(
@@ -204,10 +277,82 @@ class SportsAPIImport(models.TransientModel):
                             f"(ID: {team_data.get('id')})"
                         )
 
-    def _create_fetch_standings_from_api(self):
-        leagues_followed = self.env[
-            'sports.league'
-        ].search([('follow', '=', True)])
+    def _prepare_standings_values(
+        self,
+        team_data: Dict[str, Any],
+        team_record: models.Model
+    ) -> Dict[str, Any]:
+        """Prepare values for standings creation/update.
+
+        Args:
+            team_data: Raw team data from API
+            team_record: Team record in Odoo
+
+        Returns:
+            Dictionary with prepared values
+        """
+        update_date_str = team_data.get("update")
+        update_date = datetime.strptime(
+            update_date_str[:19], "%Y-%m-%dT%H:%M:%S"
+        ) if update_date_str else False
+
+        # Usar .get() para proporcionar valores por defecto
+        # si las claves no existen
+        return {
+            "rank": team_data.get("rank", 0),
+            "team_id": team_record.id,
+            "points": team_data.get("points", 0),
+            "goals_diff": team_data.get("goalsDiff", 0),
+            "group": team_data.get("group", ""),
+            "form": team_data.get("form", ""),
+            "status": team_data.get("status", ""),
+            "description": team_data.get("description", ""),
+            "update_date": update_date,
+        }
+
+    def _create_or_update_standings(
+        self,
+        standings_vals: Dict[str, Any],
+        team_data: Dict[str, Any]
+    ) -> models.Model:
+        """Create or update standings record.
+
+        Args:
+            standings_vals: Prepared standings values
+            team_data: Raw team data from API
+
+        Returns:
+            Created or updated standings record
+        """
+        standings_model = self.env['sports.standings']
+        existing_standing = standings_model.search([
+            ('team_id', '=', standings_vals['team_id']),
+            ('update_date', '=', standings_vals['update_date']),
+            ('group', '=', standings_vals['group'])
+        ], limit=1)
+
+        if existing_standing:
+            existing_standing.write(standings_vals)
+            _logger.info("Updated standings for %s", team_data['name'])
+            return existing_standing
+        else:
+            new_standing = standings_model.create(standings_vals)
+            _logger.info("Created new standings for %s", team_data['name'])
+            return new_standing
+
+    def _create_fetch_standings_from_api(self, *args, **kwargs):
+        if kwargs:
+            league_id = kwargs.get('league')
+            season = kwargs.get('season')
+            leagues_followed = self.env['sports.league'].search([
+                ('league_id_api', '=', league_id),
+                ('session_id.name', '=', season)
+            ])
+            _logger.info(f"\n\n league: {league_id} season: {season} \n\n")
+        else:
+            leagues_followed = self.env['sports.league'].search(
+                [('follow', '=', True)]
+            )
 
         if not leagues_followed:
             raise exceptions.UserError(
@@ -229,41 +374,44 @@ class SportsAPIImport(models.TransientModel):
 
                     for standing in standings_data:
                         for team in standing:
-                            team_data = team["team"]
-                            team_stats_overall = team["all"]
-                            team_stats_home = team["home"]
-                            team_stats_away = team["away"]
+                            # Agregar log para depuración
+                            _logger.debug(
+                                "Team data received from API: %s", team
+                            )
+
+                            team_data = team.get("team", {})
+                            team_stats_overall = team.get("all", {})
+                            team_stats_home = team.get("home", {})
+                            team_stats_away = team.get("away", {})
+
+                            # Combinar datos del equipo con estadísticas
+                            team_data.update({
+                                "rank": team.get("rank", 0),
+                                "points": team.get("points", 0),
+                                "goalsDiff": team.get("goalsDiff", 0),
+                                "form": team.get("form", ""),
+                                "status": team.get("status", ""),
+                                "group": team.get("group", ""),
+                                "description": team.get("description", ""),
+                            })
 
                             team_record = self.env['sports.team'].search([
-                                ('team_id_api', '=', team_data["id"]),
+                                ('team_id_api', '=', team_data.get("id")),
                                 ('league_id', '=', league.id),
                                 ('session_id', '=', league.session_id.id)
                             ], limit=1)
 
                             if not team_record:
                                 _logger.warning(
-                                    f"Team {team_data['name']} "
-                                    f"not found in Odoo. Skipping..."
+                                    "Team %s not found in Odoo. Skipping...",
+                                    team_data.get('name', 'Unknown')
                                 )
                                 continue
 
-                            # Convertir la fecha ISO 8601 a formato de Odoo
-                            update_date_str = team.get("update")
-                            update_date = datetime.strptime(
-                                update_date_str[:19], "%Y-%m-%dT%H:%M:%S"
-                            ) if update_date_str else False
-
-                            standings_vals = {
-                                "rank": team["rank"],
-                                "team_id": team_record.id,
-                                "points": team["points"],
-                                "goals_diff": team["goalsDiff"],
-                                "group": team.get("group"),
-                                "form": team.get("form"),
-                                "status": team.get("status"),
-                                "description": team.get("description"),
-                                "update_date": update_date,
-                            }
+                            standings_vals = self._prepare_standings_values(
+                                team_data,
+                                team_record
+                            )
 
                             # Buscar si existe un standing para este equipo
                             # en la misma fecha
@@ -271,8 +419,12 @@ class SportsAPIImport(models.TransientModel):
                                 'sports.standings'
                             ].search([
                                 ('team_id', '=', team_record.id),
-                                ('update_date', '=', update_date),
-                                ('group', '=', team.get('group'))
+                                (
+                                    'update_date',
+                                    '=',
+                                    standings_vals['update_date']
+                                ),
+                                ('group', '=', team_data.get('group'))
                             ], limit=1)
 
                             if existing_standing:
@@ -285,12 +437,10 @@ class SportsAPIImport(models.TransientModel):
                                 )
                             else:
                                 # Crear nuevo standing
-                                standings_record = self.env[
-                                    'sports.standings'
-                                ].create(standings_vals)
-                                _logger.info(
-                                    f"Created new standings for "
-                                    f"{team_data['name']}"
+                                standings_record = (
+                                    self._create_or_update_standings(
+                                        standings_vals, team_data
+                                    )
                                 )
 
                             stats_vals = [
@@ -336,9 +486,9 @@ class SportsAPIImport(models.TransientModel):
                                         f"for {team_data['name']}"
                                     )
 
-    def fetch_teams_from_api(self):
+    def fetch_teams_from_api(self, *args, **kwargs):
         """Fetch teams data from API Football for each followed league."""
         _logger.info("\n\nStarting teams import from API\n\n")
-        self._create_fetch_teams_from_api()
-        self._create_fetch_standings_from_api()
+        self._create_fetch_teams_from_api(**kwargs)
+        self._create_fetch_standings_from_api(**kwargs)
         _logger.info("Teams import finished")

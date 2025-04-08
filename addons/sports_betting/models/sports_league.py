@@ -24,3 +24,11 @@ class SportsLeague(models.Model):
             'This league already exists for the selected season.'
         )
     ]
+
+    def sync_leagues_data(self):
+        data = {
+            'league': self.league_id_api,
+            'season': self.session_id.name
+        }
+        model = self.env['sports.api.import']
+        model.fetch_teams_from_api(**data)

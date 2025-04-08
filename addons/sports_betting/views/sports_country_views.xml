@@ -20,6 +20,9 @@
         <field name="arch" type="xml">
             <form string="Country" create="false" delete="false" duplicate="false">
                 <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button string="Sync Leagues" name="sync_leagues" type="object" class="oe_stat_button" icon="fa-download" invisible="not session_id"/>
+                    </div>
                     <!-- Título con dos columnas: Nombre a la izquierda, Bandera a la derecha -->
                     <group>
                         <group>
@@ -83,11 +86,11 @@
         </field>
     </record>
 
-    <menuitem
+    <!-- <menuitem
         id="sports_country_menu"
         name="Countries"
         action="action_sports_country"
         parent="sports_betting_menu"
-        sequence="10"/>
+        sequence="10"/> -->
 
 </odoo>

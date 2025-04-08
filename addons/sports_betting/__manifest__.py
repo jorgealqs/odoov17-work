@@ -33,8 +33,19 @@
         'views/sports_api_import_views.xml',
         'views/sports_league_views.xml',
         'views/sports_team_views.xml',
+        'views/sports_team_views.xml',
+        'views/sports_dashboard_views.xml',
         'data/data_sports_session.xml',
     ],
+    'assets': {
+        'web.assets_backend': [
+            'sports_betting/static/src/**/*',
+            ('remove', 'sports_betting/static/src/dashboard/**/*'),
+        ],
+        'sports_betting.dashboard': [
+            'sports_betting/static/src/dashboard/**/*'
+        ]
+    },
     'installable': True,
     'application': True,
     'auto_install': False,

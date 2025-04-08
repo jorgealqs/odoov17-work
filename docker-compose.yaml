@@ -7,22 +7,19 @@ services:
     depends_on: # Specifies dependencies. The 'web' service will only start after the 'db' service is active.
       - db
     ports:
-      - "${WEB_PORT}:${WEB_DEFAULT_PORT}" # Maps port 8069 of the container to port 8070 on the host, allowing access to Odoo via port 8071.
+      - "${WEB_PORT}:${WEB_DEFAULT_PORT}"
+      - "${DEBUGPY_PORT}:${DEBUGPY_PORT}"
     volumes:
       - odoo-v17-web-data:/var/lib/odoo # Mounts a persistent volume for Odoo data.
       - ./config:/etc/odoo # Mounts custom configuration files from your local machine to the container.
       - ./addons:/mnt/extra-addons # Mounts the folder for custom addons.
       - ./log:/var/log/odoo # Mounts the log folder so you can view logs locally.
       - ./requirements.txt:/requirements.txt # Monta el archivo requirements.txt dentro del
-
     environment:
       - PASSWORD_FILE=/run/secrets/postgresql_password # Specifies the location of the file containing the database password.
     secrets:
       - postgresql_password # Defines a secret that will be passed securely to the container.
-    command: >
-      bash -c "
-      pip3 install -r /requirements.txt &&
-      /entrypoint.sh odoo"
+    entrypoint: ${entrypoint}
 
   db: # This service defines the PostgreSQL container.
     image: ${DB_IMAGE} # Uses the official PostgreSQL version 15 image.

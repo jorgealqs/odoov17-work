@@ -61,11 +61,11 @@
     </record>
 
     <!-- Menu Item -->
-    <menuitem
+    <!-- <menuitem
         id="menu_sports_team"
         name="Teams"
         action="action_sports_team"
         parent="sports_betting_menu"
-        sequence="30"/>
+        sequence="30"/> -->
 
 </odoo>

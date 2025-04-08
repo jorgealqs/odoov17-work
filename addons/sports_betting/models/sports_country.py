@@ -1,4 +1,7 @@
 from odoo import models, fields  # type: ignore
+import logging
+
+_logger = logging.getLogger(__name__)
 
 
 class SportsCountry(models.Model):
@@ -15,3 +18,11 @@ class SportsCountry(models.Model):
         ondelete='restrict',
         tracking=True
     )
+
+    def sync_leagues(self):
+        model = self.env['sports.api.import']
+        data = {
+            'season': self.session_id.name,
+            'code': self.code
+        }
+        model.fetch_leagues_from_api(**data)

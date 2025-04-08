@@ -23,6 +23,9 @@
         <field name="arch" type="xml">
             <form string="League" delete="false" create="false" duplicate="false">
                 <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button string="Sync" name="sync_leagues_data" type="object" class="oe_stat_button fa-1x" icon="fa-download" invisible="not follow"/>
+                    </div>
                     <!-- League Header with Name and Logo -->
                     <group>
                         <div class="oe_title">
@@ -150,11 +153,11 @@
     </record>
 
     <!-- Menu Item (placed under Countries) -->
-    <menuitem
+    <!-- <menuitem
         id="sports_league_menu"
         name="Leagues"
         action="action_sports_league"
         parent="sports_betting_menu"
-        sequence="20"/>
+        sequence="20"/> -->
 
 </odoo>
