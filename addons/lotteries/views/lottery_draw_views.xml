@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Tree View -->
+    <record id="lottery_draw_view_tree" model="ir.ui.view">
+        <field name="name">lottery.draw.tree</field>
+        <field name="model">lottery.draw</field>
+        <field name="arch" type="xml">
+            <tree string="Lottery Draws" duplicate="false">
+                <field name="name"/>
+                <field name="game_id"/>
+                <field name="number_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                <field name="jackpot" widget="monetary"/>
+                <field name="win" widget="boolean_toggle" optional="hide"/>
+                <field name="draw_number" optional="hide"/>
+                <field name="draw_date"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="lottery_draw_view_form" model="ir.ui.view">
+        <field name="name">lottery.draw.form</field>
+        <field name="model">lottery.draw</field>
+        <field name="arch" type="xml">
+            <form string="Lottery Draw" delete="false" create="false" duplicate="false">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" placeholder="Draw Name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="game_id" options="{'no_create': True}"/>
+                            <field name="draw_date"/>
+                        </group>
+                        <group>
+                            <field name="jackpot" widget="monetary"/>
+                            <field name="win" widget="boolean_toggle"/>
+                            <field name="draw_number"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Numbers" name="numbers">
+                            <field name="number_ids">
+                                <tree editable="bottom">
+                                    <field name="number"/>
+                                    <field name="color" optional="hide" options="{'color_field': 'color'}"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Search View -->
+    <record id="lottery_draw_view_search" model="ir.ui.view">
+        <field name="name">lottery.draw.search</field>
+        <field name="model">lottery.draw</field>
+        <field name="arch" type="xml">
+            <search string="Search Lottery Draws">
+                <field name="name"/>
+                <field name="game_id"/>
+                <field name="draw_date"/>
+
+                <separator/>
+                <filter string="Baloto" name="game_baloto" domain="[('game_id.name', '=', 'Baloto')]"/>
+                <filter string="MiLoto" name="game_miloto" domain="[('game_id.name', '=', 'MiLoto')]"/>
+                <filter string="Baloto Revancha" name="game_baloto_revancha" domain="[('game_id.name', '=', 'Baloto Revancha')]"/>
+                <filter string="ColorLoto" name="game_colorloto" domain="[('game_id.name', '=', 'ColorLoto')]"/>
+
+                <separator/>
+                <group expand="0" string="Group By">
+                    <filter string="Game" name="group_by_game" context="{'group_by': 'game_id'}"/>
+                    <filter string="Draw Date" name="group_by_date" context="{'group_by': 'draw_date:month'}"/>
+                    <filter string="Win" name="group_by_win" context="{'group_by': 'win'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_lottery_draw" model="ir.actions.act_window">
+        <field name="name">Lottery Draws</field>
+        <field name="res_model">lottery.draw</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first lottery draw!
+            </p>
+            <p>
+                Create a new lottery draw to manage winning numbers and jackpots.
+            </p>
+        </field>
+    </record>
+
+    <!-- Menu Items -->
+    <menuitem id="menu_lottery_draw"
+        name="Lottery Draws"
+        action="action_lottery_draw"
+        parent="lottery_menu_root"
+        sequence="1"/>
+</odoo>

@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+
+    <!-- This Menu Item will appear in the Upper bar, that's why It needs NO parent or action -->
+    <menuitem id="lottery_menu_root" name="Lotteries" sequence="10"/>
+
+    <menuitem id="lottery_menu_settings" name="Settings" sequence="10" parent="lottery_menu_root"/>
+
+</odoo>

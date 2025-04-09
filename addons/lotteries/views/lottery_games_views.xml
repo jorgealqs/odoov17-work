@@ -1,0 +1,138 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <!-- Form View -->
+    <record id="lottery_game_view_form" model="ir.ui.view">
+        <field name="name">lottery.game.form</field>
+        <field name="model">lottery.game</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" placeholder="e.g. Powerball"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="website" widget="url"/>
+                            <field name="active" widget="boolean_toggle"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Description" name="description">
+                            <field name="description" placeholder="Enter game description..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Tree View -->
+    <record id="lottery_game_view_tree" model="ir.ui.view">
+        <field name="name">lottery.game.tree</field>
+        <field name="model">lottery.game</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="website" widget="url"/>
+                <field name="active" widget="boolean_toggle"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Search View -->
+    <record id="lottery_game_view_search" model="ir.ui.view">
+        <field name="name">lottery.game.search</field>
+        <field name="model">lottery.game</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="website"/>
+                <filter string="Archived" name="inactive" domain="[('active', '=', False)]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Website" name="group_by_website" context="{'group_by': 'website'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Kanban View -->
+    <record id="lottery_game_view_kanban" model="ir.ui.view">
+        <field name="name">lottery.game.kanban</field>
+        <field name="model">lottery.game</field>
+        <field name="arch" type="xml">
+            <kanban class="o_lottery_game_kanban">
+                <field name="id"/>
+                <field name="name"/>
+                <field name="website"/>
+                <field name="description"/>
+                <field name="active"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_global_click o_kanban_record_has_image_fill o_lottery_game_kanban">
+                            <div class="oe_kanban_details d-flex flex-column">
+                                <div class="o_kanban_record_top">
+                                    <div class="o_kanban_record_headings">
+                                        <strong class="o_kanban_record_title">
+                                            <field name="name"/>
+                                        </strong>
+                                    </div>
+                                    <div class="o_kanban_record_bottom">
+                                        <div class="oe_kanban_bottom_left">
+                                            <field name="active" widget="boolean_toggle"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="o_kanban_record_body">
+                                    <div class="lottery_website" t-if="record.website.value">
+                                        <i class="fa fa-globe" role="img" aria-label="Website"/>
+                                        <a t-att-href="record.website.value" target="_blank">
+                                            <field name="website"/>
+                                        </a>
+                                    </div>
+                                    <div class="lottery_description text-muted mt-2" t-if="record.description.value">
+                                        <field name="description" widget="html"/>
+                                    </div>
+                                </div>
+                                <div class="o_kanban_record_bottom mt-auto">
+                                    <div class="oe_kanban_bottom_right">
+                                        <div class="o_kanban_badges">
+                                            <span class="badge rounded-pill text-bg-info">
+                                                <i class="fa fa-ticket" role="img" aria-label="Lottery Game"/> Game
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_lottery_game" model="ir.actions.act_window">
+        <field name="name">Lottery Games</field>
+        <field name="res_model">lottery.game</field>
+        <field name="view_mode">tree,form,kanban</field>
+        <field name="search_view_id" ref="lottery_game_view_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first lottery game!
+            </p>
+            <p>
+                Create different types of lottery games that you want to manage.
+            </p>
+        </field>
+    </record>
+
+    <!-- Menu Item -->
+    <menuitem
+        id="menu_lottery_game"
+        name="Games"
+        parent="lottery_menu_settings"
+        action="action_lottery_game"
+        sequence="1"/>
+</odoo>
