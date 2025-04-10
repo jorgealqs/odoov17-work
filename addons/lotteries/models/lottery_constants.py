@@ -4,12 +4,14 @@ URLS = {
     'baloto': "https://baloto.com/resultados-baloto",
     'revancha': "https://baloto.com/resultados-revancha",
     'miloto': "https://baloto.com/miloto/resultados-miloto",
+    'colorloto': "https://baloto.com/colorloto/resultados",
 }
 
 SEARCH_BALOTO = ['Baloto', 'Baloto Revancha']
 
 BALOTO = "Baloto"
 SEARCH_MILOTO = ["MiLoto"]
+SEARCH_COLORLOTO = ["ColorLoto"]
 
 HEADERS = {
             'User-Agent': (
