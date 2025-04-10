@@ -7,7 +7,11 @@ URLS = {
     'colorloto': "https://baloto.com/colorloto/resultados",
 }
 
+SEARCH_BALOTO_REVANCHA = ['Baloto Revancha']
+
 SEARCH_BALOTO = ['Baloto', 'Baloto Revancha']
+
+BALOTO_SEARCH = ['Baloto']
 
 BALOTO = "Baloto"
 SEARCH_MILOTO = ["MiLoto"]

@@ -1,0 +1,10 @@
+<odoo>
+    <data>
+        <record model="ir.actions.client" id="dashboard_lotteries">
+            <field name="name">Dashboard</field>
+            <field name="tag">lotteries.dashboardAction</field>
+        </record>
+
+        <menuitem name="Dashboard" id="lottery_dashboard_menu" parent="menu_lottery_draw" action="dashboard_lotteries" sequence="20"/>
+    </data>
+</odoo>

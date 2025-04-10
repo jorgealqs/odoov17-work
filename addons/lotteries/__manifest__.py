@@ -24,8 +24,18 @@
         'views/views.xml',
         'views/lottery_games_views.xml',
         'views/lottery_draw_views.xml',
-        'data/cron.xml'
+        'data/cron.xml',
+        'views/action_dashboard_views.xml'
     ],
+    'assets': {
+        'web.assets_backend': [
+            'lotteries/static/src/**/*',
+            ('remove', 'lotteries/static/src/dashboard/**/*'),
+        ],
+        'lotteries.dashboard': [
+            'lotteries/static/src/dashboard/**/*',
+        ],
+    },
     'installable': True,
     'auto_install': False,
     'application': True,

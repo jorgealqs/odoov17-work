@@ -9,7 +9,12 @@ class LotteryDraw(models.Model):
     name = fields.Char(string='Draw Name', required=True)
     draw_number = fields.Integer(string='Sorteo', required=True)
     draw_date = fields.Date(string='Draw Date')
-    game_id = fields.Many2one('lottery.game', string='Game', required=True)
+    game_id = fields.Many2one(
+        'lottery.game',
+        string='Game',
+        required=True,
+        ondelete='restrict'
+    )
     jackpot = fields.Float(string='Jackpot Amount', digits=(12, 2))
     win = fields.Boolean(string='Win', default=False)
 
