@@ -25,15 +25,16 @@
         'views/lottery_games_views.xml',
         'views/lottery_draw_views.xml',
         'data/cron.xml',
-        'views/action_dashboard_views.xml'
+        'views/action_dashboard_views.xml',
+        'views/action_lottery_forecast_views.xml',
     ],
     'assets': {
         'web.assets_backend': [
             'lotteries/static/src/**/*',
-            ('remove', 'lotteries/static/src/dashboard/**/*'),
+            ('remove', 'lotteries/static/src/lotteries/dashboard/**/*'),
         ],
         'lotteries.dashboard': [
-            'lotteries/static/src/dashboard/**/*',
+            'lotteries/static/src/lotteries/dashboard/**/*',
         ],
     },
     'installable': True,

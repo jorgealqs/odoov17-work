@@ -6,10 +6,11 @@ import { Layout } from "@web/search/layout";
 import { useService } from "@web/core/utils/hooks";
 import { DashboardItem } from "./dashboard_item/dashboard_item";
 import { PieChart } from "./pie_chart/pie_chart";
+import { DashboardLastDraw } from "./last_draw/last_draw";
 
 class DashboardGames extends Component {
     static template = "lotteries.Dashboard";
-    static components = { Layout, DashboardItem, PieChart };
+    static components = { Layout, DashboardItem, PieChart, DashboardLastDraw };
 
     setup() {
         this.action = useService("action");
@@ -18,6 +19,7 @@ class DashboardGames extends Component {
             controlPanel: {},
         };
         this.statistics = useState(useService("lotteries.statistics"));
+        console.log(this.statistics);
     }
 
     openLotteriesDraws(){

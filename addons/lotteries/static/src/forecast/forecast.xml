@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+    <t t-name="lotteries.Forecast">
+        <Layout display="display" className="'o_dashboard h-100 max-h-screen overflow-y-auto'">
+
+            <!-- Botones superiores -->
+            <t t-set-slot="layout-buttons">
+                <button class="btn btn-primary" t-on-click="openLotteriesDraws">Lotteries Draws</button>
+            </t>
+
+            <!-- Título -->
+            <section class="fade-in text-center bg-light rounded shadow p-5 my-4 w-100">
+                <h1 class="display-5 mb-3">📊 Detailed Statistics:</h1>
+                <p class="fs-5 text-muted mb-0">Track draws, analyze stats, and stay lucky 🍀</p>
+            </section>
+
+            <!-- Contenido -->
+            <div class="container-fluid mb-5" t-if="statistics.isReady">
+
+                <!-- Filtros -->
+                <div class="card shadow-sm mb-4 p-4">
+                    <h5 class="text-center mb-4">🎯 Choose Your Filters</h5>
+                    <div class="row g-3 align-items-end justify-content-center">
+                        <div class="col-md-5">
+                            <SelectGame games="statistics.games" name="'-- 1. Choose a Game --'" title="'Game'" onSelectChange.bind="onSelectChange"/>
+                        </div>
+                        <div class="col-md-5">
+                            <SelectGame games="statistics.options" name="'-- 2. Choose an Option --'" title="'Option'" onSelectChange.bind="onSelectChange"/>
+                        </div>
+                        <div class="col-md-2 text-center">
+                            <button t-on-click="applyFilters" class="btn btn-primary w-100">
+                                🎯 Apply
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Resultados -->
+                <div class="card shadow-sm p-4">
+                    <div t-if="statistics.results">
+                        <h4 class="text-center mb-4">📌 Most Frequent Numbers</h4>
+                        <ForescastItems results="statistics.results"/>
+                        <!-- <BarChart data="state.frequentNumbers"/> -->
+                    </div>
+                    <div t-else="">
+                        <p class="text-muted text-center">No hay resultados para mostrar.</p>
+                    </div>
+                </div>
+
+            </div>
+
+        </Layout>
+    </t>
+</templates>

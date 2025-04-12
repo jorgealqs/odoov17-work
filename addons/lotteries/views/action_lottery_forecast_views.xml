@@ -1,0 +1,10 @@
+<odoo>
+    <data>
+        <record model="ir.actions.client" id="forescast_lotteries">
+            <field name="name">Forecast</field>
+            <field name="tag">lotteries.forecastAction</field>
+        </record>
+
+        <menuitem name="Forecast" id="lottery_forecast_menu" parent="menu_lottery_draw" action="forescast_lotteries" sequence="10"/>
+    </data>
+</odoo>

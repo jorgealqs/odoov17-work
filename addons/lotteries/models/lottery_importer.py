@@ -1,6 +1,11 @@
 from odoo import models, api
 import logging
-from .lottery_constants import SEARCH_BALOTO, SEARCH_MILOTO, SEARCH_COLORLOTO
+from .lottery_constants import (
+    SEARCH_BALOTO,
+    SEARCH_MILOTO,
+    SEARCH_COLORLOTO,
+    SEARCH_MEDELLIN
+)
 from datetime import datetime
 
 _logger = logging.getLogger(__name__)
@@ -83,4 +88,12 @@ class LotteryImporter(models.AbstractModel):
             SEARCH_COLORLOTO,
             'lottery.importer.colorloto',
             allowed_days=[1, 4]  # Martes, Viernes
+        )
+
+    @api.model
+    def run_import_medellin(self):
+        self._import_lotteries(
+            SEARCH_MEDELLIN,
+            'lottery.importer.medellin',
+            allowed_days=[5]  # Martes, Viernes
         )

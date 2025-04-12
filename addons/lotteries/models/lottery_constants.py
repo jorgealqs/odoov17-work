@@ -12,6 +12,7 @@ SEARCH_BALOTO_REVANCHA = ['Baloto Revancha']
 SEARCH_BALOTO = ['Baloto', 'Baloto Revancha']
 
 BALOTO_SEARCH = ['Baloto']
+SEARCH_MEDELLIN = ['Lotería de Medellín']
 
 BALOTO = "Baloto"
 SEARCH_MILOTO = ["MiLoto"]
@@ -27,3 +28,18 @@ HEADERS = {
             'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
             'Connection': 'keep-alive',
         }
+
+SPANISH_TO_ENGLISH_MONTHS = {
+    'enero': 'January',
+    'febrero': 'February',
+    'marzo': 'March',
+    'abril': 'April',
+    'mayo': 'May',
+    'junio': 'June',
+    'julio': 'July',
+    'agosto': 'August',
+    'septiembre': 'September',
+    'octubre': 'October',
+    'noviembre': 'November',
+    'diciembre': 'December'
+}

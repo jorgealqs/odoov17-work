@@ -12,60 +12,62 @@
             <t t-set-slot="control-panel-additional-actions">
             </t>
 
-            <!-- Bienvenida (fuera del grid de DashboardItem) -->
+            <!-- Bienvenida -->
             <section class="fade-in text-center bg-light rounded shadow p-5 my-4 w-100">
                 <h1 class="display-5 mb-3">🎉 Welcome to your Dashboard!</h1>
                 <p class="fs-5 text-muted mb-0">Track draws, analyze stats, and stay lucky 🍀</p>
             </section>
 
-            <!-- Contenido principal -->
-            <div class="d-flex flex-wrap gap-4 p-4 w-100 mb-5" t-if="statistics.isReady">
-                <DashboardItem size="2">
-                    <div class="text-center bg-white border rounded-4 shadow-lg py-4 px-3 h-100">
-                        <h2 class="fs-4 mb-3 text-primary">
-                            🎯 Baloto <br/>
-                            <small class="text-muted">Total: <t t-esc="statistics.baloto.total" /></small>
-                        </h2>
-                        <PieChart label="'Win? '" data="{'yes':statistics.baloto.win, 'no':statistics.baloto.fall}"/>
+            <!-- Layout de dos columnas más compacto -->
+            <div class="container-fluid mb-5" t-if="statistics.isReady">
+                <div class="scrollable-stats d-flex flex-wrap flex-lg-nowrap gap-3 justify-content-center">
+                    <!-- Columna izquierda: Últimos sorteos -->
+                    <div class="flex-grow-1 mb-5" style="min-width: 300px; max-width: 600px;">
+                        <h4 class="mb-2 text-primary">📅 Últimos Sorteos</h4>
+                        <DashboardLastDraw lastDraw="statistics.last_draws"/>
                     </div>
-                </DashboardItem>
-                <DashboardItem size="2">
-                    <div class="text-center bg-white border rounded-4 shadow-lg py-4 px-3 h-100">
-                        <h2 class="fs-4 mb-3 text-primary">
-                            🎯 Revancha <br/>
-                            <small class="text-muted">
-                                Total: <t t-esc="statistics.revancha.total" />
-                            </small>
-                        </h2>
-                        <PieChart label="'Win? '" data="{'yes':statistics.revancha.win, 'no':statistics.revancha.fall}"/>
+                    <!-- Columna derecha: Estadísticas por juego -->
+                    <div class="flex-grow-1 d-flex flex-wrap gap-3 justify-content-center mb-5">
+                        <DashboardItem size="2">
+                            <div class="text-center bg-white border rounded-4 shadow-lg py-3 px-2 h-100">
+                                <h2 class="fs-5 mb-2 text-primary">
+                                    🎯 Baloto <br/>
+                                    <small class="text-muted">Total: <t t-esc="statistics.baloto.total" /></small>
+                                </h2>
+                                <PieChart label="'Win? '" data="{'yes':statistics.baloto.win, 'no':statistics.baloto.fall}"/>
+                            </div>
+                        </DashboardItem>
+                        <DashboardItem size="2">
+                            <div class="text-center bg-white border rounded-4 shadow-lg py-3 px-2 h-100">
+                                <h2 class="fs-5 mb-2 text-primary">
+                                    🎯 Revancha <br/>
+                                    <small class="text-muted">Total: <t t-esc="statistics.revancha.total" /></small>
+                                </h2>
+                                <PieChart label="'Win? '" data="{'yes':statistics.revancha.win, 'no':statistics.revancha.fall}"/>
+                            </div>
+                        </DashboardItem>
+                        <DashboardItem size="2">
+                            <div class="text-center bg-white border rounded-4 shadow-lg py-3 px-2 h-100">
+                                <h2 class="fs-5 mb-2 text-primary">
+                                    🎯 Miloto <br/>
+                                    <small class="text-muted">Total: <t t-esc="statistics.miloto.total" /></small>
+                                </h2>
+                                <PieChart label="'Win? '" data="{'yes':statistics.miloto.win, 'no':statistics.miloto.fall}"/>
+                            </div>
+                        </DashboardItem>
+                        <DashboardItem size="2">
+                            <div class="text-center bg-white border rounded-4 shadow-lg py-3 px-2 h-100">
+                                <h2 class="fs-5 mb-2 text-primary">
+                                    🎯 ColorLoto <br/>
+                                    <small class="text-muted">Total: <t t-esc="statistics.colorloto.total" /></small>
+                                </h2>
+                                <PieChart label="'Win? '" data="{'yes':statistics.colorloto.win, 'no':statistics.colorloto.fall}"/>
+                            </div>
+                        </DashboardItem>
                     </div>
-                </DashboardItem>
-                <DashboardItem size="2">
-                    <div class="text-center bg-white border rounded-4 shadow-lg py-4 px-3 h-100">
-                        <h2 class="fs-4 mb-3 text-primary">
-                            🎯 Miloto <br/>
-                            <small class="text-muted">
-                                Total: <t t-esc="statistics.miloto.total" />
-                            </small>
-                        </h2>
-                        <PieChart label="'Win? '" data="{'yes':statistics.miloto.win, 'no':statistics.miloto.fall}"/>
-                    </div>
-                </DashboardItem>
-                <DashboardItem size="2">
-                    <div class="text-center bg-white border rounded-4 shadow-lg py-4 px-3 h-100">
-                        <h2 class="fs-4 mb-3 text-primary">
-                            🎯 ColorLoto <br/>
-                            <small class="text-muted">
-                                Total: <t t-esc="statistics.colorloto.total" />
-                            </small>
-                        </h2>
-                        <PieChart label="'Win? '" data="{'yes':statistics.colorloto.win, 'no':statistics.colorloto.fall}"/>
-                    </div>
-                </DashboardItem>
-                <footer class="text-center text-muted py-4 w-100 small">
-                    <p>Made with ❤️ by Creative Minds | Stay lucky 🍀</p>
-                </footer>
+                </div>
             </div>
+            <div class="clearfix"></div>
         </Layout>
     </t>
 </templates>
