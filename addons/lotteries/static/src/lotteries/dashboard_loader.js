@@ -7,7 +7,7 @@ import { Component, xml } from "@odoo/owl";
 class DashboardGamesLoader extends Component {
     static components = { LazyComponent };
     static template = xml`
-    <LazyComponent bundle="'lotteries.dashboard'" Component="'DashboardGames'" props="props"/>
+    <LazyComponent bundle="'lotteries.dashboard'" Component="'DashboardGamesLottery'" props="props"/>
     `;
 }
 

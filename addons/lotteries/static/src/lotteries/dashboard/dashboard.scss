@@ -1,5 +1,28 @@
+:root {
+    /* Base Background */
+    --bs-body-bg: #d9d9d9;
+
+    /* Lotto Colors */
+    --color-lotto-3: #ff9900;
+    --color-lotto-1: #ff0000;
+    --color-lotto-4: #49a3ff;
+    --color-lotto-0: #262626;
+    --color-lotto-10: #00ff4c;
+    --color-lotto-13: #bababa;
+
+    --text-color: #ffffff;
+
+    /* General Styling */
+    --circle-size: 2rem;
+    --font-size: 0.8rem;
+    --border-radius: 50%;
+    --transition-speed: 0.3s;
+}
+
 .o_dashboard {
-    background-color: #d9d9d9;
+    background-color: var(--bs-body-bg);
+    padding: 1rem;
+    border-radius: 12px;
 }
 
 .fade-in {
@@ -15,4 +38,47 @@
         opacity: 1;
         transform: translateY(0);
     }
+}
+
+.round-lotto {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    width: var(--circle-size);
+    height: var(--circle-size);
+    border-radius: var(--border-radius);
+    font-size: var(--font-size);
+    text-decoration-color: var(--bs-body-bg);
+    transition: background-color var(--transition-speed), transform var(--transition-speed);
+    color: var(--text-color);
+}
+
+.round-lotto:hover {
+    transform: scale(1.1);
+}
+
+/* Lotto Colors */
+.round-lotto-3 {
+    background-color: var(--color-lotto-3);
+}
+
+.round-lotto-1 {
+    background-color: var(--color-lotto-1);
+}
+
+.round-lotto-4 {
+    background-color: var(--color-lotto-4);
+}
+
+.round-lotto-0 {
+    background-color: var(--color-lotto-0);
+}
+
+.round-lotto-10 {
+    background-color: var(--color-lotto-10);
+}
+
+.round-lotto-13 {
+    background-color: var(--color-lotto-13);
 }

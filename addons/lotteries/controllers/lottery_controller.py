@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import pandas as pd
+from babel.dates import format_date
 import numpy as np
 from odoo import http
 from odoo.http import request
@@ -44,10 +45,18 @@ class LotteryController(http.Controller):
                 order='draw_date desc'
             )
             if draw:
+                # Formatear fecha en español
+                draw_date_str = format_date(
+                    draw.draw_date, format='long', locale='es_ES'
+                )
                 result[game.name] = {
                     'id': draw.id,
-                    'draw_date': draw.draw_date.isoformat(),
-                    'numbers': [n.number for n in draw.number_ids],
+                    'draw_date': draw_date_str,
+                    'name': game.name,
+                    'numbers': [{
+                        'number': n.number,
+                        'color': n.color
+                    } for n in draw.number_ids],
                 }
 
         return result

@@ -3,9 +3,13 @@
 import { Component } from "@odoo/owl";
 
 export class DashboardLastDraw extends Component {
-    static template = "lotteries.DashboardLastDraw";
+    static template = "lotteries.DashboardLastItemDraw";
     static props = {
-        lastDraw: Array,
+        lastDraw: { type: Object },
     };
+
+    setup() {
+        console.log(this.props.lastDraw);
+    }
 
 }

@@ -22,6 +22,7 @@ class ForescastGames extends Component {
         this.notification = useService("notification");
         this.action = useService("action");
         this.statistics = useState(useService("lotteries.forecast"));
+        console.log(this.statistics);
     }
 
     onSelectChange(ev) {

@@ -31,7 +31,6 @@
     'assets': {
         'web.assets_backend': [
             'lotteries/static/src/**/*',
-            ('remove', 'lotteries/static/src/lotteries/dashboard/**/*'),
         ],
         'lotteries.dashboard': [
             'lotteries/static/src/lotteries/dashboard/**/*',

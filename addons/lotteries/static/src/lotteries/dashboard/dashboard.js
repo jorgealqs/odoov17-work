@@ -28,4 +28,4 @@ class DashboardGames extends Component {
 
 }
 
-registry.category("lazy_components").add("DashboardGames", DashboardGames);
+registry.category("lazy_components").add("DashboardGamesLottery", DashboardGames);

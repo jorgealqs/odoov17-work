@@ -1,10 +1,10 @@
 <odoo>
     <data>
-        <record model="ir.actions.client" id="dashboard">
+        <record model="ir.actions.client" id="dashboardSports">
             <field name="name">Dashboard</field>
-            <field name="tag">sports_betting.dashboardAction</field>
+            <field name="tag">sports_betting.dashboardActionSports</field>
         </record>
 
-        <menuitem name="Dashboard" id="awesome_dashboard_dashboard_menu" parent="sports_betting_menu" action="dashboard" sequence="40"/>
+        <menuitem name="Dashboard" id="awesome_dashboard_dashboard_menu" parent="sports_betting_menu" action="dashboardSports" sequence="40"/>
     </data>
 </odoo>

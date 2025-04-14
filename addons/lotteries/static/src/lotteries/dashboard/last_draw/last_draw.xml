@@ -1,19 +1,25 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <templates xml:space="preserve">
-    <t t-name="lotteries.DashboardLastDraw">
+    <t t-name="lotteries.DashboardLastItemDraw">
         <div class="o_dashboard_draws" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; padding: 1rem;">
-            <t t-foreach="Object.entries(props.lastDraw)" t-as="pair" t-key="pair[1].id">
-                <t t-set="gameName" t-value="pair[0]" />
+            <t t-foreach="Object.entries(props.lastDraw)" t-as="pair" t-key="pair[0]">
                 <t t-set="draw" t-value="pair[1]" />
                 <div class="draw-card" style="background-color: #fff; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); padding: 1rem; text-align: center;">
                     <h3 class="draw-title" style="margin-bottom: 0.5rem; font-size: 1.2rem; color: #2c3e50;">
-                        🎯 <t t-esc="gameName" />
+                        🎯 <t t-esc="draw.name" /> <!-- Esto debería mostrar el nombre del juego correctamente -->
                     </h3>
                     <p style="margin: 0; color: #7f8c8d; font-size: 0.9rem;">
                         Sorteo: <strong><t t-esc="draw.draw_date" /></strong>
                     </p>
-                    <div class="draw-numbers" style="margin-top: 0.5rem; font-size: 1.1rem; font-weight: bold; color: #34495e;">
-                        <t t-esc="draw.numbers.join(', ')" />
+                    <!-- Números con color -->
+                    <div class="draw-numbers mt-2 d-flex justify-content-center flex-wrap gap-2">
+                        <t t-set="index" t-value="0"/>  <!-- Inicializa un contador -->
+                        <t t-foreach="draw.numbers" t-as="num" t-key="'key_' + num.number + '-' + num.color + '-' + index">
+                            <t t-set="index" t-value="index + 1"/>  <!-- Incrementa el contador -->
+                            <div t-attf-class="round-lotto-{{num.color}} d-inline-flex justify-content-center align-items-center fw-bold" class="round-lotto">
+                                <t t-esc="num.number" />
+                            </div>
+                        </t>
                     </div>
                 </div>
             </t>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <templates xml:space="preserve">
-    <t t-name="sports_betting.Dashboard">
+    <t t-name="sports_betting.DashboardSports">
         <Layout display="display" className="'o_dashboard h-100'">
 
             <!-- Botones superiores -->
@@ -24,7 +24,7 @@
                 <t t-if="isLoaded">
 
                     <!-- Componente de estadísticas -->
-                    <DashboardItem title="'Countries in/without session'">
+                    <DashboardItemSports title="'Countries in/without session'">
                         <!-- Pie Chart -->
                         <div class="text-center mb-3">
                             <PieChart label="'Session by country'" data="chartData"/>
@@ -37,8 +37,8 @@
                                 <t t-esc="inSessionCountries"/>
                             </p>
                         </div>
-                    </DashboardItem>
-                    <DashboardItem title="'Leagues'" size="2">
+                    </DashboardItemSports>
+                    <DashboardItemSports title="'Leagues'" size="2">
                         <!-- Pie Chart -->
                         <div class="text-center mb-3">
                             <PieChart label="'League'" data="chartDataLeague"/>
@@ -51,7 +51,7 @@
                                 <t t-esc="inSessionLeagues"/>
                             </p>
                         </div>
-                    </DashboardItem>
+                    </DashboardItemSports>
                 </t>
             </div>
         </Layout>

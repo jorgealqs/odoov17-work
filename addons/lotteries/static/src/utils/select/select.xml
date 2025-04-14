@@ -3,11 +3,11 @@
     <t t-name="lotteries.SelectGame" owl="1">
         <div class="form-group mb-3">
             <label class="form-label">🎯 Select a  <t t-esc="props.title" /></label>
-            <select class="form-select" t-on-change="onSelectChange">
+            <select class="form-select" t-on-change="onSelectChange" t-key="props.name">
                 <option value="">
                     <t t-esc="props.name" />
                 </option>
-                <t t-foreach="props.games" t-as="game" t-key="game.id">
+                <t t-foreach="props.games" t-as="game" t-key="game.value">
                     <option t-att-value="game.value">
                         <t t-esc="game.name" />
                     </option>

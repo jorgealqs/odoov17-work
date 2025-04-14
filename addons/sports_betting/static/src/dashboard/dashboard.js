@@ -4,12 +4,12 @@ import { Component, onWillStart } from "@odoo/owl";
 import { registry } from "@web/core/registry";
 import { Layout } from "@web/search/layout";
 import { useService } from "@web/core/utils/hooks";
-import { DashboardItem } from "../dashboard_item/dashboard_item";
+import { DashboardItemSports } from "../dashboard_item/dashboard_item";
 import { PieChart } from "../pie_chart/pie_chart";
 
-class DashboardGames extends Component {
-    static template = "sports_betting.Dashboard";
-    static components = { Layout, DashboardItem, PieChart};
+class DashboardSportsGames extends Component {
+    static template = "sports_betting.DashboardSports";
+    static components = { Layout, DashboardItemSports, PieChart};
 
     setup() {
         this.display = {
@@ -51,4 +51,4 @@ class DashboardGames extends Component {
     }
 }
 
-registry.category("lazy_components").add("DashboardGames", DashboardGames);
+registry.category("lazy_components").add("DashboardSports", DashboardSportsGames);
