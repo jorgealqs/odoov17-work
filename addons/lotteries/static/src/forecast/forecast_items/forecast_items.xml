@@ -13,20 +13,20 @@
                         style="max-width: 250px;" />
                 </div>
 
-                <table class="table table-striped" id="frequencyTable">
+                <table class="table table-striped table-hover table-sm" id="frequencyTable">
                     <thead>
                         <tr>
-                            <th>Número</th>
-                            <th>Frecuencia</th>
-                            <th>Prom. Días</th>
-                            <th>Última Fecha</th>
-                            <th>Todas las Fechas</th>
+                            <th scope="col">Número</th>
+                            <th scope="col">Frecuencia</th>
+                            <th scope="col">Prom. Días</th>
+                            <th scope="col">Última Fecha</th>
+                            <th scope="col">Todas las Fechas</th>
                         </tr>
                     </thead>
                     <tbody>
                         <t t-foreach="props.results" t-as="row" t-key="row.number">
                             <tr>
-                                <td><t t-esc="row['number']" /></td>
+                                <th scope="col"><t t-esc="row['number']" /></th>
                                 <td><t t-esc="row['frequency']" /></td>
                                 <td><t t-esc="row['avg_days_between']" /></td>
                                 <td><t t-esc="row['last_seen']" /></td>

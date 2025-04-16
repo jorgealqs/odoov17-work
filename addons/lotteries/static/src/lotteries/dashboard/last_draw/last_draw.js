@@ -8,8 +8,8 @@ export class DashboardLastDraw extends Component {
         lastDraw: { type: Object },
     };
 
-    setup() {
-        console.log(this.props.lastDraw);
-    }
+    // setup() {
+    //     console.log(this.props.lastDraw);
+    // }
 
 }

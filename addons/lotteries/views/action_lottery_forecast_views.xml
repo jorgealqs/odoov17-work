@@ -5,6 +5,6 @@
             <field name="tag">lotteries.forecastAction</field>
         </record>
 
-        <menuitem name="Forecast" id="lottery_forecast_menu" parent="menu_lottery_draw" action="forescast_lotteries" sequence="10"/>
+        <menuitem name="Forecast" id="lottery_forecast_menu" parent="menu_lottery_draw" action="forescast_lotteries" sequence="30"/>
     </data>
 </odoo>

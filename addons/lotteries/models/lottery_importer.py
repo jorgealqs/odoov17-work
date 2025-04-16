@@ -95,5 +95,5 @@ class LotteryImporter(models.AbstractModel):
         self._import_lotteries(
             SEARCH_MEDELLIN,
             'lottery.importer.medellin',
-            allowed_days=[5]  # Martes, Viernes
+            allowed_days=[5]  # Sabado
         )

@@ -10,8 +10,11 @@ from ..models.lottery_constants import (
     BALOTO_SEARCH,
     SEARCH_MILOTO,
     SEARCH_BALOTO_REVANCHA,
-    SEARCH_COLORLOTO
+    SEARCH_COLORLOTO,
+    SEARCH_MEDELLIN
 )
+from itertools import combinations
+from collections import defaultdict
 
 _logger = logging.getLogger(__name__)
 
@@ -27,6 +30,7 @@ class LotteryController(http.Controller):
                 'revancha': self._get_lottery_data(SEARCH_BALOTO_REVANCHA),
                 'miloto': self._get_lottery_data(SEARCH_MILOTO),
                 'colorloto': self._get_lottery_data(SEARCH_COLORLOTO),
+                'medellin': self._get_lottery_data(SEARCH_MEDELLIN),
                 'last_draws': self._get_last_raws()
             }
         except Exception as e:
@@ -106,7 +110,6 @@ class LotteryController(http.Controller):
         return [
             {'value': 'frequency', 'name': 'Frecuencia de Números'},
             {'value': 'repeats', 'name': 'Combinaciones Repetidas'},
-            {'value': 'hot_numbers', 'name': 'Números Más Frecuentes'},
         ]
 
     @http.route('/lottery/forecast/results', type='json', auth='user')
@@ -116,8 +119,9 @@ class LotteryController(http.Controller):
             data = args[0]
             game_id = data.get('game_id')
             option_id = data.get('option_id')
+            combination = data.get('number')
         else:
-            game_id = option_id = None
+            game_id = option_id = combination = None
 
         if not game_id or not option_id:
             return {'error': 'Missing game or option ID'}
@@ -128,8 +132,19 @@ class LotteryController(http.Controller):
 
         if not draws:
             return {'error': 'No draws found'}
+        data_frecuency = self._data_frecuency(draws)
 
-        # Construir DataFrame desde los datos de Odoo
+        if option_id == 'frequency':
+            return self._get_number_frequency(data_frecuency)
+        elif option_id == 'repeats':
+            combination = int(combination) if str(combination).isdigit() else 2
+            return self._get_all_combinations_frequency(
+                draws, int(combination)
+            )
+
+        return {'error': 'Invalid option'}
+
+    def _data_frecuency(self, draws):
         data = []
         for draw in draws:
             for num in draw.number_ids:
@@ -138,16 +153,51 @@ class LotteryController(http.Controller):
                     'number': num.number,
                     'color': num.color
                 })
+        return data
 
-        if option_id == 'frequency':
-            return self._get_number_frequency(data)
-        elif option_id == 'repeats':
-            return self._get_number_repeats(data)
+    def _get_all_combinations_frequency(self, draws, n=2):
+        if not draws or not isinstance(n, int) or n < 2:
+            return {'error': 'Invalid draw data or combination length'}
 
-        return {'error': 'Invalid option'}
+        combo_data = defaultdict(list)
 
-    def _get_number_repeats(self, data):
-        _logger.info(f"\n\n_get_number_repeats: {data}\n\n")
+        for draw in draws:
+            date = draw.draw_date
+            numbers = [num.number for num in draw.number_ids]
+            if len(numbers) >= n:
+                for combo in combinations(numbers, n):
+                    combo_key = "-".join(map(str, combo))
+                    combo_data[combo_key].append(date)
+
+        results = []
+        for combo_str, dates in combo_data.items():
+            dates = sorted(pd.to_datetime(dates))
+            frequency = len(dates)
+
+            if frequency >= 2:
+                days_between = pd.Series(dates).diff().dropna().dt.days
+                avg_days = round(
+                    days_between.mean(), 2
+                ) if not days_between.empty else None
+            else:
+                avg_days = None
+
+            results.append({
+                'number': combo_str,
+                'frequency': frequency,
+                'avg_days_between': avg_days,
+                'last_seen': dates[-1].date().isoformat(),
+                'all_dates': [d.date().isoformat() for d in dates]
+            })
+
+        # Ordenar por frecuencia descendente
+        results = sorted(
+            results,
+            key=lambda x: (x['frequency'], x['last_seen']),
+            reverse=True
+        )
+
+        return {'results': results}
 
     def _get_number_frequency(self, data):
         if not data:

@@ -99,7 +99,6 @@
     <!-- Menu Items -->
     <menuitem id="menu_lottery_draw"
         name="Lottery Draws"
-        action="action_lottery_draw"
         parent="lottery_menu_root"
         sequence="1"/>
 </odoo>

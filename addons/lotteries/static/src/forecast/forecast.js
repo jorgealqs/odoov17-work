@@ -18,11 +18,18 @@ class ForescastGames extends Component {
         this.state = useState({
             selectedGameValue: "",
             selectedOptionValue: "",
+            selectedNumberValue: "",
         });
         this.notification = useService("notification");
         this.action = useService("action");
         this.statistics = useState(useService("lotteries.forecast"));
-        console.log(this.statistics);
+        this.combinations = [
+            { name: "2", value: "2" },
+            { name: "3", value: "3" },
+            { name: "4", value: "4" },
+            { name: "5", value: "5" },
+            { name: "6", value: "6" },
+        ];
     }
 
     onSelectChange(ev) {
@@ -31,11 +38,13 @@ class ForescastGames extends Component {
             this.state.selectedGameValue = value;
         } else if (title === "Option") {
             this.state.selectedOptionValue = value;
+        } else if (title === "Number") {
+            this.state.selectedNumberValue = value;
         }
     }
 
     async applyFilters() {
-        const { selectedGameValue, selectedOptionValue } = this.state;
+        const { selectedGameValue, selectedOptionValue, selectedNumberValue } = this.state;
 
         if (!selectedGameValue || !selectedOptionValue) {
             this.notification.add("Please select both a game and an option.", {
@@ -49,10 +58,10 @@ class ForescastGames extends Component {
         const params = {
             game_id: selectedGameValue,
             option_id: selectedOptionValue,
+            number: selectedNumberValue,
         };
 
         await this.statistics.loadData(url, params);
-        console.log("✅ Filters applied with:", this.statistics);
     }
 
     openLotteriesDraws(){

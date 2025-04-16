@@ -64,6 +64,15 @@
                                 <PieChart label="'Win? '" data="{'yes':statistics.colorloto.win, 'no':statistics.colorloto.fall}"/>
                             </div>
                         </DashboardItem>
+                        <DashboardItem size="2">
+                            <div class="text-center bg-white border rounded-4 shadow-lg py-3 px-2 h-100">
+                                <h2 class="fs-5 mb-2 text-primary">
+                                    🎯 Lotería de Medellín <br/>
+                                    <small class="text-muted">Total: <t t-esc="statistics.medellin.total" /></small>
+                                </h2>
+                                <PieChart label="'Win? '" data="{'yes':statistics.medellin.win, 'no':statistics.medellin.fall}"/>
+                            </div>
+                        </DashboardItem>
                     </div>
                 </div>
             </div>

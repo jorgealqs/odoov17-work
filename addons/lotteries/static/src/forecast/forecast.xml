@@ -21,11 +21,14 @@
                 <div class="card shadow-sm mb-4 p-4">
                     <h5 class="text-center mb-4">🎯 Choose Your Filters</h5>
                     <div class="row g-3 align-items-end justify-content-center">
-                        <div class="col-md-5">
+                        <div class="col-md-2">
                             <SelectGame games="statistics.games" name="'-- 1. Choose a Game --'" title="'Game'" onSelectChange.bind="onSelectChange"/>
                         </div>
-                        <div class="col-md-5">
+                        <div class="col-md-2">
                             <SelectGame games="statistics.options" name="'-- 2. Choose an Option --'" title="'Option'" onSelectChange.bind="onSelectChange"/>
+                        </div>
+                        <div class="col-md-2">
+                            <SelectGame games="combinations" name="'-- 3. Choose a Number --'" title="'Number'" onSelectChange.bind="onSelectChange"/>
                         </div>
                         <div class="col-md-2 text-center">
                             <button t-on-click="applyFilters" class="btn btn-primary w-100">

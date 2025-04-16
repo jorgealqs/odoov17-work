@@ -7,6 +7,7 @@ URLS = {
     'colorloto': "https://baloto.com/colorloto/resultados",
 }
 
+SEARCH_MEDELLIN = ['Lotería de Medellín']
 SEARCH_BALOTO_REVANCHA = ['Baloto Revancha']
 
 SEARCH_BALOTO = ['Baloto', 'Baloto Revancha']
