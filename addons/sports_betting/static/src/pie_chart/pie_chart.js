@@ -27,7 +27,7 @@ export class PieChart extends Component {
         const data = Object.values(this.props.data);
         const color = labels.map((_, index) => getColor(index));
         this.chart = new Chart(this.canvasRef.el, {
-            type: "pie",
+            type: "doughnut",
             data: {
                 labels: labels,
                 datasets: [
@@ -35,8 +35,17 @@ export class PieChart extends Component {
                         label: this.props.label,
                         data: data,
                         backgroundColor: color,
+                        borderColor: color,
+                        fill: false,
+                        tension: 0.1, // suaviza la línea
                     },
                 ],
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { position: "top" },
+                },
             },
         });
     }

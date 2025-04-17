@@ -1,41 +1,26 @@
 /** @odoo-module **/
 
-import { Component, onWillStart } from "@odoo/owl";
+import { Component, useState } from "@odoo/owl";
 import { registry } from "@web/core/registry";
 import { Layout } from "@web/search/layout";
 import { useService } from "@web/core/utils/hooks";
 import { DashboardItemSports } from "../dashboard_item/dashboard_item";
 import { PieChart } from "../pie_chart/pie_chart";
+import { DashboardFollowedLeagues } from "./DashboardFollowedLeagues/DashboardFollowedLeagues";
 
 class DashboardSportsGames extends Component {
     static template = "sports_betting.DashboardSports";
-    static components = { Layout, DashboardItemSports, PieChart};
+    static components = { Layout, DashboardItemSports, PieChart, DashboardFollowedLeagues };
 
     setup() {
+        this.hasData = false;
         this.display = {
             controlPanel: {},
         };
-        this.isLoaded = false; // <--- Estado para indicar si los datos están listos
         this.chartData = {};
-        this.statistics = useService("awesome_dashboard.statistics");
+        this.statistics = useState(useService("awesome_dashboard.statistics"));
         this.action = useService("action");
-        onWillStart(async () => {
-            this.statistics = await this.statistics.loadStatistics();
-            const stats = this.statistics.countries;
-            const stats_leagues_data = this.statistics.leagues;
-            this.chartData = {
-                "In session": stats.with_sessions.count,
-                "Without session": stats.without_sessions.count,
-            };
-            const stats_leagues = this.statistics.leagues;
-            this.chartDataLeague = {
-                "Following": stats_leagues.followed.count,
-                "Not Following": stats_leagues.not_followed.count,
-            };
-            this.isLoaded = true; // <--- Marca que los datos ya están listos
-            this.inSessionCountries = stats.with_sessions.names.map((c) => c.name).join(', ');
-            this.inSessionLeagues = stats_leagues_data.followed.names.map((c) => c.name).join(', ');
-        });
+        console.log(this.statistics)
     }
 
     openCountries(){
@@ -48,6 +33,10 @@ class DashboardSportsGames extends Component {
 
     openTeams(){
         this.action.doAction("sports_betting.action_sports_team");
+    }
+
+    openConfiguration() {
+        console.log("openConfiguration");
     }
 }
 

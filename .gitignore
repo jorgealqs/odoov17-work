@@ -46,3 +46,6 @@ odoo_pg_pass
 # OS specific
 .DS_Store
 Thumbs.db
+
+addons/sports_betting/
+addons/sport_metrics_jq/
