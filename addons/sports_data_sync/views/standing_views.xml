@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <!-- Search View -->
+    <record id="view_sports_track_standing_search" model="ir.ui.view">
+        <field name="name">sports.track.standing.search</field>
+        <field name="model">sports.track.standing</field>
+        <field name="arch" type="xml">
+            <search string="League Standings Search">
+                <field name="team_id"/>
+                <field name="league_id"/>
+                <field name="session_id"/>
+                <field name="rank"/>
+                <field name="points"/>
+                <field name="status"/>
+                <field name="form"/>
+                <field name="update_date"/>
+
+                <filter string="Top 5" name="top_5" domain="[('rank','&lt;=',5)]"/>
+                <filter string="With Description" name="with_description" domain="[('description','!=',False)]"/>
+                <filter string="Recent Updates" name="recent_updates" domain="[('update_date','>=',context_today())]"/>
+
+                <group expand="0" string="Group By...">
+                    <filter string="Country" name="group_by_country" context="{'group_by':'country_id'}"/>
+                    <filter string="League" name="group_by_league" context="{'group_by':'league_id'}"/>
+                    <filter string="Session" name="group_by_session" context="{'group_by':'session_id'}"/>
+                    <filter string="Group Name" name="group_by_group" context="{'group_by':'group'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Tree View -->
+    <record id="view_sports_track_standing_tree" model="ir.ui.view">
+        <field name="name">sports.track.standing.tree</field>
+        <field name="model">sports.track.standing</field>
+        <field name="arch" type="xml">
+            <tree string="League Standings" create="False" duplicate="False" decoration-success="rank == 1" decoration-muted="team_id">
+                <field name="team_id"/>
+                <field name="rank"/>
+                <field name="points"/>
+                <field name="played"/>
+                <field name="win"/>
+                <field name="draw"/>
+                <field name="lose"/>
+                <field name="goals_for"/>
+                <field name="goals_against"/>
+                <field name="goals_diff"/>
+                <field name="home_played" optional="hide"/>
+                <field name="home_win" optional="hide"/>
+                <field name="home_draw" optional="hide"/>
+                <field name="home_lose" optional="hide"/>
+                <field name="home_goals_for" optional="hide"/>
+                <field name="home_goals_against" optional="hide"/>
+                <field name="away_played" optional="hide"/>
+                <field name="away_win" optional="hide"/>
+                <field name="away_draw" optional="hide"/>
+                <field name="away_lose" optional="hide"/>
+                <field name="away_goals_for" optional="hide"/>
+                <field name="away_goals_against" optional="hide"/>
+                <field name="form" optional="hide"/>
+                <field name="status" optional="hide"/>
+                <field name="description" optional="hide"/>
+                <field name="group"/>
+                <field name="league_id"/>
+                <field name="session_id"/>
+                <field name="update_date"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Action Without Menu -->
+    <record id="action_sports_track_standing" model="ir.actions.act_window">
+        <field name="name">League Standings</field>
+        <field name="res_model">sports.track.standing</field>
+        <field name="view_mode">tree</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No standings yet. Start by importing or creating them!
+            </p>
+        </field>
+    </record>
+
+</odoo>

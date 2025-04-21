@@ -1,0 +1,59 @@
+<templates xml:space="preserve">
+    <t t-name="sports_data_sync.DashboardSync">
+        <!-- Layout base -->
+        <Layout display="display" className="'o_dashboard h-100 max-h-screen overflow-y-auto'">
+
+            <!-- Botones superiores -->
+            <t t-set-slot="layout-buttons">
+                <button class="btn btn-primary" t-on-click="openCountries">Countries</button>
+                <button class="btn btn-primary" t-on-click="openLeagues">Leagues</button>
+                <button class="btn btn-primary" t-on-click="openTeams">Teams</button>
+                <button class="btn btn-primary" t-on-click="openStandings">Standings</button>
+            </t>
+
+            <!-- Bienvenida -->
+            <section class="fade-in text-center bg-light rounded shadow p-5 my-4 w-100">
+                <h1 class="display-5 mb-3">
+                    <i class="fa fa-trophy text-warning me-2"></i>
+                    Welcome to your Sports Sync Dashboard!
+                </h1>
+                <p class="fs-5 text-muted mb-0">
+                    <i class="fa fa-eye me-1"></i> Follow your favorite teams,
+                    <i class="fa fa-bar-chart mx-1"></i> analyze league stats,
+                    and <i class="fa fa-money mx-1"></i> make smarter bets!
+                </p>
+            </section>
+
+            <!-- Dashboard -->
+            <div class="container-fluid mb-5" t-if="statistics.isReady">
+                <div class="row g-3">
+
+                    <!-- Columna izquierda (Filtros) -->
+                    <div class="col-12 col-lg-2 bg-light border-end p-3">
+                        <h5>Filtros</h5>
+                        <p>Contenido adicional o filtros opcionales.</p>
+                    </div>
+
+                    <!-- Columna central (Principal) -->
+                    <div class="col-12 col-lg-6 p-3">
+                        <h2>Contenido Principal</h2>
+                        <p>Aquí va el dashboard principal o estadísticas centrales.</p>
+                    </div>
+
+                    <!-- Columna derecha (Gráficos y Ligas) -->
+                    <div class="col-12 col-lg-4 bg-light border-start p-3">
+                        <div class="mb-4">
+                            <PieChart label="'Distribución de Países'" data="statistics.follow_countries"/>
+                        </div>
+                        <div>
+                            <h4 class="mb-3 text-muted">
+                                <i class="fa fa-star text-warning me-2"></i>Followed Leagues
+                            </h4>
+                            <LeagueCards leagues="statistics.follow_leagues" onClickLeague.bind="onClickLeague"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </Layout>
+    </t>
+</templates>

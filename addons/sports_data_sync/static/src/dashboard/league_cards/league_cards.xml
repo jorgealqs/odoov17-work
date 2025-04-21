@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+    <t t-name="sports_data_sync.DashboardLeagueCards">
+        <div class="container-fluid mt-4">
+            <div class="row g-3">
+                <t t-foreach="props.leagues" t-as="league" t-key="league.league_id">
+                    <div class="col-12">
+                        <div class="card border-0 shadow-sm rounded-4 hover-shadow transition-all">
+                            <div class="row g-0 align-items-center">
+
+                                <!-- Logo -->
+                                <div class="col-12 col-md-2 text-center p-3">
+                                    <img t-if="league.logo" t-att-src="league.logo"
+                                         class="img-fluid"
+                                         style="height: 80px; object-fit: contain;"
+                                         alt="League Logo"/>
+                                </div>
+
+                                <!-- Info -->
+                                <div class="col-12 col-md-10">
+                                    <div class="card-body">
+
+                                        <!-- Título + Botón -->
+                                        <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-2 gap-2">
+                                            <h5 class="card-title text-primary fw-semibold mb-0" t-esc="league.league_name"/>
+                                            <button type="button"
+                                                    class="btn btn-sm btn-outline-primary rounded-pill"
+                                                    t-on-click="onClickLeague"
+                                                    t-att-data-league-id="league.league_id">
+                                                <i class="fa fa-table me-1"></i> View Table
+                                            </button>
+                                        </div>
+
+                                        <!-- Detalles -->
+                                        <p class="card-text text-muted mb-0">
+                                            <strong>Country:</strong> <t t-esc="league.country"/>
+                                            &#160;|&#160;
+                                            <strong>Session:</strong> <t t-esc="league.session"/>
+                                        </p>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </div>
+        </div>
+    </t>
+</templates>

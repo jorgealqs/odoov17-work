@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <!-- model.name search view -->
+    <record id="sports_track_country_search" model="ir.ui.view">
+        <field name="name">sports.track.country Search</field>
+        <field name="model">sports.track.country</field>
+        <field name="arch" type="xml">
+            <search string="Search Description">
+                <!-- Add your fields here -->
+                <field name="name"/>
+                <field name="country_code"/>
+                <filter string="Active session" name="group_session" domain="[('session_id', '!=', False)]"/>
+                <!-- Default group by country -->
+                <group expand="1" string="Group By">
+                    <filter string="Continents" name="group_continent" context="{'group_by':'continent'}"/>
+                </group>
+
+            </search>
+        </field>
+    </record>
+
+    <!-- Vista tipo árbol -->
+    <record id="view_sports_track_country_tree" model="ir.ui.view">
+        <field name="name">sports.track.country.tree</field>
+        <field name="model">sports.track.country</field>
+        <field name="arch" type="xml">
+            <tree editable="bottom" decoration-success="session_id" decoration-bf="session_id">
+                <field name="name" readonly="session_id"/>
+                <field name="country_code" readonly="session_id"/>
+                <field name="flag" widget="image_url" options="{'size': [50, 50]}" readonly="session_id"/>
+                <field name="continent" readonly="session_id"/>
+                <field name="session_id"/>
+                <button name="sync_leagues" class="oe_stat_button" type="object" string="Sync" icon="fa-refresh" confirm="Are you sure you want to update the leagues?" invisible="not session_id" help="Synchronize leagues for this country"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Acción para abrir la vista tree -->
+    <record id="action_sports_track_country" model="ir.actions.act_window">
+        <field name="name">Countries</field>
+        <field name="res_model">sports.track.country</field>
+        <field name="view_mode">tree</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_empty_folder">
+                <strong>No countries found.</strong><br/>
+                This section allows you to manage countries associated with sports leagues and results.<br/>
+                <br/>
+                <em>Keeping</em> this list up to date ensures accurate tracking and analysis of sports data by region.
+            </p>
+        </field>
+    </record>
+
+</odoo>

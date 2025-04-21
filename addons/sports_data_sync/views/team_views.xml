@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+        <!-- Search View -->
+        <record id="view_sports_track_team_search" model="ir.ui.view">
+            <field name="name">sports.track.team.search</field>
+            <field name="model">sports.track.team</field>
+            <field name="arch" type="xml">
+                <search string="Football Teams Search">
+                    <field name="name" string="Team Name"/>
+                    <field name="league_id" string="League"/>
+                    <field name="session_id" string="Session"/>
+                    <field name="country_id" string="Country"/>
+                    <filter name="filter_by_league" string="Followed Leagues" domain="[('league_id.follow', '=', True)]"/>
+                    <group expand="1" string="Group By">
+                        <filter name="group_by_country" string="Country" context="{'group_by': 'country_id'}"/>
+                        <filter name="group_by_league" string="League" context="{'group_by': 'league_id'}"/>
+                        <filter name="group_by_session" string="Session" context="{'group_by': 'session_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+    <!-- Tree View -->
+    <record id="view_sports_track_team_tree" model="ir.ui.view">
+        <field name="name">sports.track.team.tree</field>
+        <field name="model">sports.track.team</field>
+        <field name="arch" type="xml">
+            <tree string="Football Teams" create="False" duplicate="False" decoration-muted="name">
+                <field name="name"/>
+                <field name="logo" widget="image_url" options="{'size': [50, 50]}"/>
+                <field name="api_id" optional="hide"/>
+                <field name="country_id"/>
+                <field name="league_id"/>
+                <field name="session_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_sports_track_team" model="ir.actions.act_window">
+        <field name="name">Football Teams</field>
+        <field name="res_model">sports.track.team</field>
+        <field name="view_mode">tree</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create the first football team to start tracking.
+            </p>
+        </field>
+    </record>
+
+</odoo>
