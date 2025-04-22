@@ -108,3 +108,4 @@ class SportsTrackLeague(models.Model):
                 }
             }
             self.env['sports.track.team']._sync_teams(**data)
+            self.env['sports.track.fixture']._sync_fixtures(**data)

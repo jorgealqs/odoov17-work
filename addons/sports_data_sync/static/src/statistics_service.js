@@ -6,12 +6,12 @@ import { reactive } from "@odoo/owl";
 const serviceDashboard = {
     dependencies: ["rpc"],
     start(env, { rpc }) {
-        const statistics = reactive({ isReady: false });
+        const statistics = reactive({ hasData: false });
 
         async function loadData({ url = "/sports_data/dashboard", params = {} } = {}) {
             try {
                 const updates = await rpc(url, params);
-                Object.assign(statistics, updates, { isReady: true });
+                Object.assign(statistics, updates, { hasData: updates.hasData });
             } catch (error) {
                 console.error("Error loading sports data:", error);
             }

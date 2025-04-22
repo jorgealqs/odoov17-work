@@ -32,6 +32,7 @@ Además de mostrar estadísticas y generar pronósticos
         'views/league_views.xml',
         'views/team_views.xml',
         'views/standing_views.xml',
+        'views/fixture_views.xml',
     ],
     'images': ['static/description/banner.png'],
     'assets': {

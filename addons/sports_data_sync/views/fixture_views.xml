@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- Tree View con campos relevantes visibles y el resto ocultos -->
+    <record id="view_sports_track_fixture_tree" model="ir.ui.view">
+        <field name="name">sports.track.fixture.tree</field>
+        <field name="model">sports.track.fixture</field>
+        <field name="arch" type="xml">
+            <tree string="Fixtures" default_order="match_date asc" create="False" delete="False" duplicate="False">
+                <field name="fixture_api_id"/>
+                <field name="match_date"/>
+                <field name="home_team_id"/>
+                <field name="home_goals"/>
+                <field name="away_team_id"/>
+                <field name="away_goals"/>
+                <field name="league_id" />
+                <field name="country_id" />
+                <field name="session_id" />
+                <!-- Ocultos por defecto -->
+                <field name="referee" optional="hide"/>
+                <field name="timezone" optional="hide"/>
+                <field name="match_timestamp" optional="hide"/>
+                <field name="halftime_home" optional="hide"/>
+                <field name="halftime_away" optional="hide"/>
+                <field name="fulltime_home" optional="hide"/>
+                <field name="fulltime_away" optional="hide"/>
+                <field name="extratime_home" optional="hide"/>
+                <field name="extratime_away" optional="hide"/>
+                <field name="penalty_home" optional="hide"/>
+                <field name="penalty_away" optional="hide"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Search View bien completo -->
+    <record id="view_sports_track_fixture_search" model="ir.ui.view">
+        <field name="name">sports.track.fixture.search</field>
+        <field name="model">sports.track.fixture</field>
+        <field name="arch" type="xml">
+            <search string="Search Fixtures">
+                <field name="fixture_api_id"/>
+                <field name="home_team_id"/>
+                <field name="away_team_id"/>
+                <field name="match_date"/>
+                <field name="league_id"/>
+                <field name="country_id"/>
+                <field name="session_id"/>
+
+                <filter string="Hoy y mañana" name="today"
+                domain="[('match_date','&gt;=', context_today()), ('match_date','&lt;', (context_today() + relativedelta(days=2)))]"
+                help="Mostrar partidos de hoy"/>
+                <filter string="Últimos 7 días" name="last_7_days" domain="[('match_date','>=',(context_today() - datetime.timedelta(days=7)).strftime('%%Y-%%m-%%d'))]"/>
+                <filter string="Futuros" name="future" domain="[('match_date','>',context_today())]"/>
+                <separator/>
+                <group expand="0" string="Grupo por">
+                    <filter string="Country" name="group_by_country" context="{'group_by':'country_id'}"/>
+                    <filter string="League" name="group_by_league" context="{'group_by':'league_id'}"/>
+                    <filter string="Session" name="group_by_session" context="{'group_by':'session_id'}"/>
+                    <filter string="Fecha" name="group_by_date" context="{'group_by':'match_date'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action sin menú -->
+    <record id="action_sports_track_fixture" model="ir.actions.act_window">
+        <field name="name">Fixtures</field>
+        <field name="res_model">sports.track.fixture</field>
+        <field name="view_mode">tree</field>
+        <field name="search_view_id" ref="view_sports_track_fixture_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_empty_folder">
+                Aquí puedes ver y analizar los partidos (fixtures) registrados.
+            </p>
+        </field>
+    </record>
+</odoo>

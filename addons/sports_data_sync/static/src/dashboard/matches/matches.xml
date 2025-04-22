@@ -1,0 +1,60 @@
+<?xml version='1.0' encoding='utf-8'?>
+<templates xml:space="preserve">
+    <t t-name="sports_sync_data.Games">
+        <t t-foreach="props.data" t-as="round" t-key="round.id">
+        <div class="card mb-4 border-1 shadow-lg rounded">
+            <div class="card-body p-4">
+                <!-- Título: Liga y País -->
+                <div class="d-flex flex-column flex-sm-row justify-content-between align-items-start mb-3">
+                    <div class="text-truncate" style="max-width: 70%;">
+                        <h6 class="mb-0 text-primary font-weight-bold">
+                            <i class="fa fa-trophy mr-2"></i>
+                            <t t-esc="round.league_id[1]"/>
+                            (<t t-esc="round.country_id[1]"/>)
+                        </h6>
+                    </div>
+                    <div class="text-truncate mt-2 mt-sm-0" style="white-space: nowrap;">
+                        <span class="badge badge-secondary px-4 py-2 text-dark font-weight-semibold" style="font-size: 0.85rem;">
+                            <i class="fa fa-calendar-alt mr-2"></i>
+                            <t t-esc="round.match_date"/>
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Equipos y VS -->
+                <div class="row align-items-center">
+                    <!-- Local -->
+                    <div class="col-12 col-md-4 mb-3 mb-md-0">
+                        <h5 class="mb-1 text-dark font-weight-bold">
+                            <t t-esc="round.home_team_id[1]"/>
+                        </h5>
+                        <small class="text-muted">Rank: <t t-esc="round.home_team_rank"/> | Pts: <t t-esc="round.home_team_points"/></small>
+                    </div>
+
+                    <!-- VS -->
+                    <div class="col-12 col-md-auto my-2 my-md-0">
+                        <span class="fs-3 text-muted">VS</span>
+                    </div>
+
+                    <!-- Visitante -->
+                    <div class="col-12 col-md-4 mb-3 mb-md-0">
+                        <h5 class="mb-1 text-dark font-weight-bold">
+                            <t t-esc="round.away_team_id[1]"/>
+                        </h5>
+                        <small class="text-muted">
+                            Rank: <t t-esc="round.away_team_rank"/> | Pts: <t t-esc="round.away_team_points"/>
+                        </small>
+                    </div>
+                </div>
+
+                <!-- Footer: Fixture ID -->
+                <div class="text-right mt-4">
+                    <small class="text-muted">
+                        Fixture ID: <t t-esc="round.fixture_api_id"/>
+                    </small>
+                </div>
+            </div>
+        </div>
+        </t>
+    </t>
+</templates>

@@ -38,3 +38,11 @@ class APIFootballConnector:
     def get_standings(self, league_id: int, season: int):
         params = {'league': league_id, 'season': season}
         return self._make_request('standings', params)
+
+    def get_fixtures(self, league_id: int, season: int):
+        params = {
+            'league': league_id,
+            'season': season,
+            'timezone': "America/Bogota"
+        }
+        return self._make_request('fixtures', params)

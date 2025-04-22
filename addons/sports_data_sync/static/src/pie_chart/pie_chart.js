@@ -57,10 +57,13 @@ export class PieChart extends Component {
                 }],
             },
             options: {
-                indexAxis: 'x',
+                indexAxis: 'y',
                 responsive: true,
                 scales: {
                     x: {
+                        display: false,
+                    },
+                    y: {
                         ticks: {
                             autoSkip: false,
                             font: {
@@ -69,12 +72,9 @@ export class PieChart extends Component {
                             callback: function(value, index, ticks) {
                                 return this.getLabelForValue(value);
                             },
-                            maxRotation: 45,
-                            minRotation: 45,
+                            // maxRotation: 45,
+                            // minRotation: 45,
                         }
-                    },
-                    y: {
-                        display: false,
                     }
                 },
                 plugins: {

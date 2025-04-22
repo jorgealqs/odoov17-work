@@ -25,7 +25,7 @@
         <field name="name">sports.track.country.tree</field>
         <field name="model">sports.track.country</field>
         <field name="arch" type="xml">
-            <tree editable="bottom" decoration-success="session_id" decoration-bf="session_id">
+            <tree create="False" delete="False" duplicate="False" decoration-success="session_id" decoration-bf="session_id" editable="bottom" decoration-muted="not session_id">
                 <field name="name" readonly="session_id"/>
                 <field name="country_code" readonly="session_id"/>
                 <field name="flag" widget="image_url" options="{'size': [50, 50]}" readonly="session_id"/>

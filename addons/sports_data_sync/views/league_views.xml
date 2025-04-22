@@ -1,63 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
 
-    <!-- model.name form view -->
-    <record id="sports_track_league_form" model="ir.ui.view">
-        <field name="name">sports.track.league Form</field>
-        <field name="model">sports.track.league</field>
-        <field name="arch" type="xml">
-            <form string="League Form">
-                <sheet>
-                    <div class="oe_button_box" name="button_box">
-                        <button name="sync_standings" type="object" string="Sync" class="oe_stat_button btn me-2" icon="fa-refresh" confirm="Are you sure you want to upgrade?" invisible="not follow" help="Synchronize standings for this league"/>
-                    </div>
-                    <!-- League Logo -->
-                    <field name="logo" widget="image_url" options="{'size': [100, 100]}" string="" readonly="id" class="oe_avatar"/>
-
-                    <!-- League Title -->
-                    <div class="oe_title">
-                        <label for="name"/>
-                        <h1>
-                            <field name="name" readonly="id"/>
-                        </h1>
-                    </div>
-
-                    <!-- Notebook for Details and Follow Status -->
-                    <notebook colspan="4">
-                        <!-- Details Page -->
-                        <page string="Details">
-                            <group>
-                                <group>
-                                    <field name="start" string="Start Date" readonly="id"/>
-                                    <field name="end" string="End Date" readonly="id"/>
-                                </group>
-                                <group>
-                                    <field name="type_league" string="Type" readonly="id"/>
-                                    <field name="id_league" readonly="1" string="League ID"/>
-                                </group>
-                            </group>
-                            <group>
-                                <group>
-                                    <field name="country_id" string="Country" readonly="id" options="{'no_create':True, 'no_open':True}"/>
-                                </group>
-                                <group>
-                                    <field name="session_id" string="Session" options="{'no_create':True, 'no_open':True}" readonly="id"/>
-                                </group>
-                            </group>
-                        </page>
-
-                        <!-- Follow Status Page -->
-                        <page string="Follow">
-                            <group>
-                                <field name="follow" string="Follow This League" widget="boolean_toggle"/>
-                            </group>
-                        </page>
-                    </notebook>
-                </sheet>
-            </form>
-        </field>
-    </record>
-
     <!-- Vista de búsqueda (search view) -->
     <record id="sports_track_league_search" model="ir.ui.view">
         <field name="name">sports.track.league.search</field>
@@ -87,7 +30,7 @@
         <field name="name">sports.track.league.tree</field>
         <field name="model">sports.track.league</field>
         <field name="arch" type="xml">
-            <tree decoration-success="follow" decoration-muted="not follow">
+            <tree decoration-success="follow" decoration-muted="not follow" create="False" delete="False" duplicate="False">
                 <field name="country_id"/>
                 <field name="name"/>
                 <field name="logo" widget="image_url" options="{'size': [80, 80]}" string="" readonly="id" class="oe_avatar"/>
@@ -97,7 +40,8 @@
                 <field name="end"/>
                 <field name="follow" widget="boolean_toggle"/>
                 <field name="session_id"/>
-                <button name="sync_standings" type="object" string="Sync" class="oe_stat_button btn me-2" icon="fa-refresh" confirm="Are you sure you want to upgrade?" invisible="not follow" help="Synchronize standings for this league"/>
+                <button name="sync_standings" type="object" string="Sync" class="oe_stat_button btn me-2" icon="fa-refresh" confirm="This will synchronize all data for this league, including teams, fixtures, and standings. Continue?"
+                invisible="not follow" help="Synchronize standings for this league"/>
             </tree>
         </field>
     </record>
@@ -106,7 +50,7 @@
     <record id="action_sports_track_league" model="ir.actions.act_window">
         <field name="name">Leagues</field>
         <field name="res_model">sports.track.league</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">tree</field>
         <field name="search_view_id" ref="sports_track_league_search"/>
         <field name="help" type="html">
             <p class="o_view_nocontent_empty_folder">

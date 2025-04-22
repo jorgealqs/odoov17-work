@@ -35,7 +35,7 @@
         <field name="name">sports.track.standing.tree</field>
         <field name="model">sports.track.standing</field>
         <field name="arch" type="xml">
-            <tree string="League Standings" create="False" duplicate="False" decoration-success="rank == 1" decoration-muted="team_id">
+            <tree string="League Standings" create="False" duplicate="False" decoration-success="rank == 1" decoration-muted="team_id" default_order="rank">
                 <field name="team_id"/>
                 <field name="rank"/>
                 <field name="points"/>
@@ -61,10 +61,10 @@
                 <field name="form" optional="hide"/>
                 <field name="status" optional="hide"/>
                 <field name="description" optional="hide"/>
-                <field name="group"/>
-                <field name="league_id"/>
-                <field name="session_id"/>
-                <field name="update_date"/>
+                <field name="group" optional="hide"/>
+                <field name="league_id" optional="hide"/>
+                <field name="session_id" optional="hide"/>
+                <field name="update_date" optional="hide"/>
             </tree>
         </field>
     </record>
