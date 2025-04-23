@@ -5,11 +5,15 @@
 
             <!-- Botones superiores -->
             <t t-set-slot="layout-buttons">
-                <button class="btn btn-primary" t-on-click="openLotteriesDraws">Lotteries Draws</button>
-            </t>
-
-            <!-- Configuración -->
-            <t t-set-slot="control-panel-additional-actions">
+                <button class="btn btn-primary" t-on-click="openLotteriesDraws">
+                    Lotteries Draws
+                </button>
+                <button class="btn btn-primary" t-on-click="openCryptoCoins">
+                    Crypto Coin
+                </button>
+                <button class="btn btn-primary" t-on-click="openCryptoHistory">
+                    Crypto History
+                </button>
             </t>
 
             <!-- Bienvenida -->
@@ -18,65 +22,87 @@
                 <p class="fs-5 text-muted mb-0">Track draws, analyze stats, and stay lucky 🍀</p>
             </section>
 
-            <!-- Layout de dos columnas más compacto -->
-            <div class="container-fluid mb-5" t-if="statistics.isReady">
-                <div class="scrollable-stats d-flex flex-wrap flex-lg-nowrap gap-3 justify-content-center">
-                    <!-- Columna izquierda: Últimos sorteos -->
-                    <div class="flex-grow-1 mb-5" style="min-width: 300px; max-width: 600px;">
-                        <h4 class="mb-2 text-primary">📅 Últimos Sorteos</h4>
-                        <DashboardLastDraw lastDraw="Object.values(statistics.last_draws)"/>
+            <!-- Layout principal -->
+            <div class="container-fluid mb-5 mt-5" t-if="statistics.isReady">
+                <div class="row g-3 bg-light">
+                    <!-- Últimos sorteos -->
+                    <div class="col-12 col-md-6 col-lg-3 p-3 border-end">
+                        <h4 class="mb-3 text-primary text-center text-md-start">
+                            📅 Últimos Sorteos
+                        </h4>
+                        <div class="d-flex flex-column gap-3">
+                            <DashboardLastDraw lastDraw="Object.values(statistics.last_draws)" />
+                        </div>
                     </div>
-                    <!-- Columna derecha: Estadísticas por juego -->
-                    <div class="flex-grow-1 d-flex flex-wrap gap-3 justify-content-center mb-5">
-                        <DashboardItem size="2">
-                            <div class="text-center bg-white border rounded-4 shadow-lg py-3 px-2 h-100">
-                                <h2 class="fs-5 mb-2 text-primary">
-                                    🎯 Baloto <br/>
-                                    <small class="text-muted">Total: <t t-esc="statistics.baloto.total" /></small>
-                                </h2>
-                                <PieChart label="'Win? '" data="{'yes':statistics.baloto.win, 'no':statistics.baloto.fall}"/>
+
+                    <!-- Estadísticas por juego -->
+                    <div class="col-12 col-lg-6 p-3 fade-down mx-auto">
+                        <h4 class="mb-4 text-primary text-center">
+                            📊 Estadísticas por Juego
+                        </h4>
+                        <div class="row g-3 justify-content-center">
+                            <!-- Baloto -->
+                            <div class="col-12 col-md-6">
+                                <div class="text-center bg-white border rounded-4 shadow-lg py-3 px-2 h-100">
+                                    <h2 class="fs-5 mb-2 text-primary">
+                                        🎯 Baloto
+                                        <small class="text-muted">Total: <t t-esc="statistics.baloto.total" /></small>
+                                    </h2>
+                                    <PieChart label="'Win? '" data="{'yes':statistics.baloto.win, 'no':statistics.baloto.fall}"/>
+                                </div>
                             </div>
-                        </DashboardItem>
-                        <DashboardItem size="2">
-                            <div class="text-center bg-white border rounded-4 shadow-lg py-3 px-2 h-100">
-                                <h2 class="fs-5 mb-2 text-primary">
-                                    🎯 Revancha <br/>
-                                    <small class="text-muted">Total: <t t-esc="statistics.revancha.total" /></small>
-                                </h2>
-                                <PieChart label="'Win? '" data="{'yes':statistics.revancha.win, 'no':statistics.revancha.fall}"/>
+                            <!-- Revancha -->
+                            <div class="col-12 col-md-6">
+                                <div class="text-center bg-white border rounded-4 shadow-lg py-3 px-2 h-100">
+                                    <h2 class="fs-5 mb-2 text-primary">
+                                        🎯 Revancha
+                                        <small class="text-muted">Total: <t t-esc="statistics.revancha.total" /></small>
+                                    </h2>
+                                    <PieChart label="'Win? '" data="{'yes':statistics.revancha.win, 'no':statistics.revancha.fall}"/>
+                                </div>
                             </div>
-                        </DashboardItem>
-                        <DashboardItem size="2">
-                            <div class="text-center bg-white border rounded-4 shadow-lg py-3 px-2 h-100">
-                                <h2 class="fs-5 mb-2 text-primary">
-                                    🎯 Miloto <br/>
-                                    <small class="text-muted">Total: <t t-esc="statistics.miloto.total" /></small>
-                                </h2>
-                                <PieChart label="'Win? '" data="{'yes':statistics.miloto.win, 'no':statistics.miloto.fall}"/>
+                            <!-- Miloto -->
+                            <div class="col-12 col-md-6">
+                                <div class="text-center bg-white border rounded-4 shadow-lg py-3 px-2 h-100">
+                                    <h2 class="fs-5 mb-2 text-primary">
+                                        🎯 Miloto
+                                        <small class="text-muted">Total: <t t-esc="statistics.miloto.total" /></small>
+                                    </h2>
+                                    <PieChart label="'Win? '" data="{'yes':statistics.miloto.win, 'no':statistics.miloto.fall}"/>
+                                </div>
                             </div>
-                        </DashboardItem>
-                        <DashboardItem size="2">
-                            <div class="text-center bg-white border rounded-4 shadow-lg py-3 px-2 h-100">
-                                <h2 class="fs-5 mb-2 text-primary">
-                                    🎯 ColorLoto <br/>
-                                    <small class="text-muted">Total: <t t-esc="statistics.colorloto.total" /></small>
-                                </h2>
-                                <PieChart label="'Win? '" data="{'yes':statistics.colorloto.win, 'no':statistics.colorloto.fall}"/>
+                            <!-- ColorLoto -->
+                            <div class="col-12 col-md-6">
+                                <div class="text-center bg-white border rounded-4 shadow-lg py-3 px-2 h-100">
+                                    <h2 class="fs-5 mb-2 text-primary">
+                                        🎯 ColorLoto
+                                        <small class="text-muted">Total: <t t-esc="statistics.colorloto.total" /></small>
+                                    </h2>
+                                    <PieChart label="'Win? '" data="{'yes':statistics.colorloto.win, 'no':statistics.colorloto.fall}"/>
+                                </div>
                             </div>
-                        </DashboardItem>
-                        <DashboardItem size="2">
-                            <div class="text-center bg-white border rounded-4 shadow-lg py-3 px-2 h-100">
-                                <h2 class="fs-5 mb-2 text-primary">
-                                    🎯 Lotería de Medellín <br/>
-                                    <small class="text-muted">Total: <t t-esc="statistics.medellin.total" /></small>
-                                </h2>
-                                <PieChart label="'Win? '" data="{'yes':statistics.medellin.win, 'no':statistics.medellin.fall}"/>
+                            <!-- Medellín -->
+                            <div class="col-12 col-md-6">
+                                <div class="text-center bg-white border rounded-4 shadow-lg py-3 px-2 h-100">
+                                    <h2 class="fs-5 mb-2 text-primary">
+                                        🎯 Lotería de Medellín
+                                        <small class="text-muted">Total: <t t-esc="statistics.medellin.total" /></small>
+                                    </h2>
+                                    <PieChart label="'Win? '" data="{'yes':statistics.medellin.win, 'no':statistics.medellin.fall}"/>
+                                </div>
                             </div>
-                        </DashboardItem>
+                        </div>
+                    </div>
+
+                    <!-- Columna Crypto -->
+                    <div class="col-12 col-lg-3 border-start p-3">
+                        <h4 class="mb-2 text-primary">
+                            📊 Crypto Coin
+                        </h4>
+                        <DashboardCryptoCoin cryptoList="statistics.crypto"/>
                     </div>
                 </div>
             </div>
-            <div class="clearfix"></div>
         </Layout>
     </t>
 </templates>

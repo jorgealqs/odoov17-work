@@ -10,6 +10,7 @@ import { ForescastItems } from "./forecast_items/forecast_items";
 class ForescastGames extends Component {
     static template = "lotteries.Forecast";
     static components = { Layout, SelectGame, ForescastItems };
+    static props = {};
 
     setup() {
         this.display = {
@@ -24,7 +25,6 @@ class ForescastGames extends Component {
         this.action = useService("action");
         this.statistics = useState(useService("lotteries.forecast"));
         this.combinations = [
-            { name: "2", value: "2" },
             { name: "3", value: "3" },
             { name: "4", value: "4" },
             { name: "5", value: "5" },

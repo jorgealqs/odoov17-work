@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+    <t t-name="lotteries.DashboardCryptoCoin">
+        <div class="w-full max-w-xl mx-auto flex flex-col gap-4 px-4">
+            <t t-foreach="props.cryptoList" t-as="coin" t-key="coin.coin">
+                <CryptoCoinItem cryptoItem="coin"/>
+            </t>
+        </div>
+    </t>
+</templates>

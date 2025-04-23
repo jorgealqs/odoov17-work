@@ -7,12 +7,13 @@ const statisticsService = {
     dependencies: ["rpc"],
     start(env, { rpc }) {
         const statistics = reactive({ isReady: false });
-        async function loadData() {
+        async function loadDataLottery() {
             const updates = await rpc("/lottery/statistics");
             Object.assign(statistics, updates, { isReady: true });
+            console.log(updates)
         }
-        setInterval(loadData, 10*60*1000);
-        loadData();
+        setInterval(loadDataLottery, 5*60*1000);
+        loadDataLottery();
         return statistics;
     },
 };

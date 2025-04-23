@@ -25,8 +25,11 @@
         'views/lottery_games_views.xml',
         'views/lottery_draw_views.xml',
         'data/cron.xml',
+        'data/cron_crypto.xml',
         'views/action_dashboard_views.xml',
         'views/action_lottery_forecast_views.xml',
+        'views/crypto_coin_views.xml',
+        'views/crypto_price_history.xml',
     ],
     'assets': {
         'web.assets_backend': [
