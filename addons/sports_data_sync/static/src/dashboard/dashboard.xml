@@ -56,7 +56,7 @@
                         </h4>
                         <!-- Componente MatchesSportsSyncData -->
                         <t t-if="statistics.rounds_leagues">
-                            <MatchesSportsSyncData data="statistics.rounds_leagues"/>
+                            <MatchesSportsSyncData data="statistics.rounds_leagues" onClickFetchFixture.bind="onClickFetchFixture"/>
                         </t>
                     </div>
 

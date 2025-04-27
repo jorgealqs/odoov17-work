@@ -20,7 +20,6 @@ class DashboardSportsSyncData extends Component {
             controlPanel: {},
         };
         this.statistics = useState(useService("sports_sync_data.statistics"));
-        console.log(this.statistics)
     }
 
     openCountries(){
@@ -58,6 +57,28 @@ class DashboardSportsSyncData extends Component {
                 ["country_id", "=", country_id],
                 ["league_id", "=", league_id_table],
                 ["session_id", "=", session_id],
+            ],
+            context: {
+                group_by: "group",
+            },
+        });
+    }
+
+    onClickFetchFixture(filter) {
+        const { leagueId, homeTeamId, awayTeamId, sessionId } = filter;
+        this.action.doAction({
+            type: "ir.actions.act_window",
+            name: "Standings",
+            res_model: "sports.track.standing",
+            views: [
+                [false, "list"],
+            ],
+            domain: [
+                ["session_id.id", "=", sessionId],
+                ["league_id.id", "=", leagueId],
+                "|",  // Esto significa "o" en los filtros de Odoo
+                ["team_id.id", "=", homeTeamId],
+                ["team_id.id", "=", awayTeamId],
             ],
             context: {
                 group_by: "group",
