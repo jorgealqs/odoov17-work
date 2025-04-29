@@ -72,9 +72,7 @@ def get_rounds_leagues():
     all_fixtures = []
 
     today = datetime.now(colombia_tz)
-    next_days = today + timedelta(days=2)
-
-    _logger.info(f"\n\n{today} {next_days} \n\n")
+    next_days = today + timedelta(days=1)
 
     for league in leagues:
         # 🚀 Traemos todos los standings UNA SOLA VEZ por liga+sesión
@@ -124,3 +122,97 @@ def get_rounds_leagues():
             all_fixtures.append(fixture)
 
     return sorted(all_fixtures, key=lambda x: x['match_date'])
+
+
+def get_statistics_by_macth():
+    matches = get_rounds_leagues()
+    results = []
+
+    for match in matches:
+        local_team_id = match['home_team_id'][0]
+        away_team_id = match['away_team_id'][0]
+        session_id = match['session_id'][0]
+        league_id = match['league_id'][0]
+        match_date = match['create_date']
+
+        local_stats = get_last_matches(
+            local_team_id,
+            session_id,
+            league_id,
+            match_date,
+            "L"
+        )
+        away_stats = get_last_matches(
+            away_team_id,
+            session_id,
+            league_id,
+            match_date,
+            "V"
+        )
+
+        results.append({
+            'team_local': match['home_team_id'][1],
+            'team_away': match['away_team_id'][1],
+            'local_stats': local_stats,
+            'away_stats': away_stats,
+        })
+
+    _logger.info(f"\n\nFULL MATCH STATS: {results}\n\n")
+    return results
+
+
+def get_last_matches(
+    team_id, session_id, league_id, date, game, limit=5
+):
+    Fixture = request.env['sports.track.fixture']
+    domain = [
+        ('session_id', '=', session_id),
+        ('match_date', '<', date),
+        '|',
+        ('home_team_id.id', '=', team_id),
+        ('away_team_id.id', '=', team_id),
+    ]
+    if league_id:
+        domain.append(('league_id', '=', league_id))
+
+    matches = Fixture.search_read(
+        domain,
+        fields=[
+            'match_date',
+            'home_team_id',
+            'away_team_id',
+            'home_goals',
+            'away_goals'
+        ],
+        order='match_date desc',
+        limit=limit
+    )
+
+    result = []
+
+    for match in matches:
+        is_home = match['home_team_id'][0] == team_id
+        opponent = match[
+            'away_team_id'
+        ][1] if is_home else match['home_team_id'][1]
+        goals_for = match['home_goals'] if is_home else match['away_goals']
+        goals_against = match['away_goals'] if is_home else match['home_goals']
+
+        if goals_for > goals_against:
+            outcome = 'Win'
+        elif goals_for < goals_against:
+            outcome = 'Loss'
+        else:
+            outcome = 'Draw'
+
+        result.append({
+            'date': match['match_date'],
+            'opponent': opponent,
+            'goals_for': goals_for,
+            'goals_against': goals_against,
+            'result': outcome,
+            'game': game,
+        })
+    # _logger.info(f"\n\nLast matches for team {team_id}: {result}\n\n")
+
+    return result

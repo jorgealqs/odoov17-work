@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates xml:space="preserve">
+    <t t-name="sports_sync_data.DataByMatch">
+        <div class="container my-4">
+            <t t-foreach="this.props.data" t-as="game" t-key="game.team_local">
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-body text-center">
+
+                        <!-- Equipos -->
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h5 class="mb-1 text-dark font-weight-bold"><t t-esc="game.team_local"/></h5>
+                            <span class="text-muted">vs</span>
+                            <h5 class="mb-1 text-dark font-weight-bold"><t t-esc="game.team_away"/></h5>
+                        </div>
+
+                        <div class="row text-start">
+                            <!-- Local -->
+                            <div class="col-md-6 mb-3">
+                                <div class="d-flex justify-content-start gap-3">
+                                    <t t-foreach="game.local_stats" t-as="match" t-key="match.date">
+                                        <i
+                                            t-attf-class="fa {{
+                                                match.result == 'Win' and 'fa-circle text-success' or
+                                                match.result == 'Loss' and 'fa-circle text-danger' or
+                                                match.result == 'Draw' and 'fa-circle text-info'
+                                            }}"
+                                            style="font-size: 1.2rem;"
+                                            t-att-title="match.date + ' vs ' + match.opponent + ' — ' + match.goals_for + ' - ' + match.goals_against">
+                                        </i>
+                                    </t>
+                                </div>
+                            </div>
+
+                            <!-- Visitante -->
+                            <div class="col-md-6 mb-3">
+                                <div class="d-flex justify-content-start gap-3">
+                                    <t t-foreach="game.away_stats" t-as="match" t-key="match.date">
+                                        <i
+                                            t-attf-class="fa {{
+                                                match.result == 'Win' and 'fa-circle text-success' or
+                                                match.result == 'Loss' and 'fa-circle text-danger' or
+                                                match.result == 'Draw' and 'fa-circle text-info'
+                                            }}"
+                                            style="font-size: 1.2rem;"
+                                            t-att-title="match.date + ' vs ' + match.opponent + ' — ' + match.goals_for + ' - ' + match.goals_against">
+                                        </i>
+                                    </t>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </div>
+    </t>
+</templates>
