@@ -10,9 +10,8 @@ const statisticsService = {
         async function loadDataLottery() {
             const updates = await rpc("/lottery/statistics");
             Object.assign(statistics, updates, { isReady: true });
-            console.log(updates)
         }
-        setInterval(loadDataLottery, 5*60*1000);
+        setInterval(loadDataLottery, 1*60*1000);
         loadDataLottery();
         return statistics;
     },

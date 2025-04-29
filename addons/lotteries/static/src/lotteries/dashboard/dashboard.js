@@ -34,6 +34,16 @@ class DashboardGames extends Component {
         this.action.doAction("lotteries.action_crypto_price_history");
     }
 
+    onClickGame(idGame, lottery){
+        this.action.doAction({
+            type: "ir.actions.act_window",
+            name: `Sorteos por Juego: ${lottery}`,
+            res_model: "lottery.draw",
+            views: [[false, "list"]],
+            domain: [["game_id.id", "=", parseInt(idGame)]],
+        });
+    }
+
 }
 
 registry.category("lazy_components").add("DashboardGamesLottery", DashboardGames);
