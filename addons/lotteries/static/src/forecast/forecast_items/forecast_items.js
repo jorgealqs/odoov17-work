@@ -8,16 +8,15 @@ export class ForescastItems extends Component {
         results: Array,
     };
 
-    // Estado para mostrar/ocultar fechas
     setup() {
         this.state = useState({
-            showDates: false,  // Inicialmente las fechas están ocultas
+            showDatesMap: {},  // Diccionario para controlar cada fila por número
         });
 
-        // Función para alternar la visibilidad de las fechas
-        this.toggleDates = () => {
-            this.state.showDates = !this.state.showDates;
+        // Alternar visibilidad para un número específico
+        this.toggleDates = (number) => {
+            const current = this.state.showDatesMap[number] || false;
+            this.state.showDatesMap[number] = !current;
         };
     }
-
 }
