@@ -22,7 +22,6 @@ class DashboardSportsSyncData extends Component {
             controlPanel: {},
         };
         this.statistics = useState(useService("sports_sync_data.statistics"));
-        console.log(this.statistics)
     }
 
     openCountries(){

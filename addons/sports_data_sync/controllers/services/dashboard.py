@@ -56,9 +56,10 @@ def get_followed_leagues():
 
 
 def get_rounds_leagues(only_ids=False):
+
     tz = pytz.timezone('America/Bogota')
     today = datetime.now(tz)
-    tomorrow = today + timedelta(days=1)
+    tomorrow = today.replace(hour=23, minute=59, second=59, microsecond=59)
 
     all_fixtures = []
 

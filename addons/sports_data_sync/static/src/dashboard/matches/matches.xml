@@ -9,8 +9,7 @@
                     <div class="d-flex flex-column flex-sm-row justify-content-between align-items-start mb-3">
                         <div class="text-truncate" style="max-width: 70%;">
                             <h6 class="mb-0 text-primary font-weight-bold">
-                                <i class="fa fa-trophy mr-2"></i>
-                                <t t-esc="round.league_id[1]"/>
+                                <i class="fa fa-trophy mr-2"></i> <t t-esc="round.league_id[1]"/>
                                 (<t t-esc="round.country_id[1]"/>)
                             </h6>
                         </div>
@@ -84,7 +83,7 @@
 
                     <!-- Footer: Fixture ID -->
                     <div class="text-right mt-4">
-                        <div class="d-flex justify-content-start text-muted small gap-4">
+                        <div class="d-flex flex-wrap justify-content-start text-muted small gap-4 align-items-center">
                             <div>
                                 <i class="fa fa-hashtag me-1"></i>
                                 Fixture ID: <t t-esc="round.fixture_api_id"/>
@@ -93,11 +92,16 @@
                                 <i class="fa fa-user me-1"></i>
                                 Referee: <t t-esc="round.referee"/>
                             </div>
-                            <div t-if="round.prediction">
-                                <i class="fas fa-lightbulb text-warning me-2"></i>
-                                <strong class="text-primary">Advice: </strong>
-                                <span class="text-dark"><t t-esc="round.prediction.advice"/></span>
-                            </div>
+                            <t t-if="round.prediction">
+                                <div>
+                                    <i class="fa fa-comment text-warning me-1"></i>
+                                    <span class="text-dark"><t t-esc="round.prediction.advice"/></span>
+                                </div>
+                                <div>
+                                    <i class="fa fa-trophy text-success me-1"></i>
+                                    <span class="text-dark"><t t-esc="round.prediction.winner"/></span>
+                                </div>
+                            </t>
                         </div>
                     </div>
                 </div>
