@@ -7,13 +7,12 @@ import { useService } from "@web/core/utils/hooks";
 import { PieChart } from "../pie_chart/pie_chart";
 import { LeagueCards } from "./league_cards/league_cards";
 import { MatchesSportsSyncData } from "./matches/matches";
-import { DashboardDataByMatch } from "./data_by_match/data_by_match"
 
 
 class DashboardSportsSyncData extends Component {
     static template = "sports_data_sync.DashboardSync";
     static components = {
-        Layout, PieChart, LeagueCards, MatchesSportsSyncData, DashboardDataByMatch
+        Layout, PieChart, LeagueCards, MatchesSportsSyncData
     };
     static props = {}
 
@@ -23,6 +22,7 @@ class DashboardSportsSyncData extends Component {
             controlPanel: {},
         };
         this.statistics = useState(useService("sports_sync_data.statistics"));
+        console.log(this.statistics)
     }
 
     openCountries(){

@@ -27,6 +27,7 @@ Además de mostrar estadísticas y generar pronósticos
         'security/ir.model.access.csv',
         'views/menu.xml',
         "data/data_session.xml",
+        "data/sync_predictions.xml",
         'views/dashboard.xml',
         'views/country_views.xml',
         'views/league_views.xml',

@@ -1,6 +1,6 @@
 /** @odoo-module */
 
-import { Component, useRef } from "@odoo/owl"
+import { Component } from "@odoo/owl"
 
 export class MatchesSportsSyncData extends Component {
     static template = "sports_sync_data.Games"
@@ -11,7 +11,6 @@ export class MatchesSportsSyncData extends Component {
         onClickFetchFixture:{
             type: Function,
         }
-
     }
 
     onClickFetchFixture(ev) {

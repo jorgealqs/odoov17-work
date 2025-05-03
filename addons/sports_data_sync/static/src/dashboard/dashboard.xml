@@ -7,9 +7,9 @@
             <t t-set-slot="layout-buttons">
                 <button class="btn btn-primary" t-on-click="openCountries">Countries</button>
                 <button class="btn btn-primary" t-on-click="openLeagues">Leagues</button>
-                <button class="btn btn-primary hide" t-on-click="openTeams">Teams</button>
                 <button class="btn btn-primary" t-on-click="openStandings">Standings</button>
                 <button class="btn btn-primary" t-on-click="openFixtures">Fixtures</button>
+                <button class="btn btn-primary hide" t-on-click="openTeams">Teams</button>
             </t>
 
             <!-- Bienvenida -->
@@ -29,26 +29,18 @@
             <div class="container-fluid mb-5 mt-5" t-if="statistics.hasData">
                 <div class="row g-3 bg-light">
 
-                    <!-- Columna izquierda (Filtros) -->
-                    <div class="col-12 col-lg-3 border-end p-3">
-                        <h4 class="mb-3 text-muted text-success">
-                            <i class="fa fa-users text-warning me-2"></i>Teams
+                    <!-- Columna izquierda (Principal) -->
+                    <div class="col-12 col-lg-8 p-3 fade-down">
+                        <h4 class="mb-3 text-muted text-success ">
+                            <i class="fa fa-calendar text-warning me-2"></i>
+                            Next Matches
                         </h4>
-
-                        <!-- Leyenda de colores -->
                         <div class="mb-3 small text-muted d-flex align-items-center gap-3">
+                            <div class="small text-muted mb-1 fw-bold">Last 5 games</div>
                             <span><i class="fa fa-circle text-success me-1"></i> Win</span>
                             <span><i class="fa fa-circle text-danger me-1"></i> Loss</span>
                             <span><i class="fa fa-circle text-info me-1"></i> Draw</span>
                         </div>
-                        <DashboardDataByMatch data="statistics.statistics_by_macth"/>
-                    </div>
-
-                    <!-- Columna central (Principal) -->
-                    <div class="col-12 col-lg-5 p-3 fade-down">
-                        <h4 class="mb-3 text-muted text-success ">
-                            <i class="fa fa-calendar text-warning me-2"></i>Next Matches
-                        </h4>
                         <!-- Componente MatchesSportsSyncData -->
                         <t t-if="statistics.rounds_leagues">
                             <MatchesSportsSyncData data="statistics.rounds_leagues" onClickFetchFixture.bind="onClickFetchFixture"/>

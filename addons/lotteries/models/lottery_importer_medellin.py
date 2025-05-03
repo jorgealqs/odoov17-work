@@ -10,13 +10,14 @@ class LotteryImporterMedellin(models.AbstractModel):
     _name = 'lottery.importer.medellin'
     _description = 'Importador de resultados Lotería de Medellín'
 
-    NUM = "4775"
+    NUM = {"4781"}
 
     @api.model
     def run_import(self, game):
         try:
-            data = self._extract_data(game)
-            self._save_data(data, game)
+            for num in self.NUM:
+                data = self._extract_data(game, int(num))
+                self._save_data(data, game)
         except requests.exceptions.HTTPError as http_err:
             _logger.error(f"❌ Error HTTP al acceder a {http_err}")
             return
@@ -43,7 +44,7 @@ class LotteryImporterMedellin(models.AbstractModel):
                     'number': int(digit)
                 })
 
-    def _extract_data(self, game):
+    def _extract_data(self, game, num):
         """
         Extrae los datos del sorteo desde la Lotería de Medellín vía POST AJAX.
         """
@@ -54,7 +55,7 @@ class LotteryImporterMedellin(models.AbstractModel):
             "action": "wp_get_results_lottery_template",
             "is_front": "true",
             "lottery_id": "16",
-            "draw_id": self.NUM,
+            "draw_id": num,
             "post_type": "results_template",
         }
 
@@ -76,6 +77,7 @@ class LotteryImporterMedellin(models.AbstractModel):
             return {}
 
         html = json_data.get("html", "")
+        _logger.info(html)
         selected = json_data.get("selected", {})
 
         # Parsear el HTML con BeautifulSoup
@@ -88,5 +90,5 @@ class LotteryImporterMedellin(models.AbstractModel):
             "number": numbers[0].text.strip() if len(numbers) > 0 else None,
             "serie": numbers[1].text.strip() if len(numbers) > 1 else None,
             "draw_date": selected.get("meta_value"),
-            "draw_number": self.NUM,
+            "draw_number": num,
         }

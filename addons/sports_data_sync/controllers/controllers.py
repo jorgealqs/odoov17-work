@@ -5,8 +5,7 @@ from odoo import http
 from .services.dashboard import (
     get_country_stats,
     get_followed_leagues,
-    get_rounds_leagues,
-    get_statistics_by_macth
+    get_rounds_leagues
 )
 
 _logger = logging.getLogger(__name__)
@@ -24,7 +23,6 @@ class SportsDataController(http.Controller):
                 "follow_countries": follow_countries,
                 "follow_leagues": get_followed_leagues(),
                 "rounds_leagues": get_rounds_leagues(),
-                "statistics_by_macth": get_statistics_by_macth(),
                 "hasData": has_data,
             }
 

@@ -31,7 +31,7 @@
                             📅 Últimos Sorteos
                         </h4>
                         <div class="d-flex flex-column gap-3">
-                            <DashboardLastDraw lastDraw="Object.values(statistics.last_draws)" onClickGame.bind="onClickGame"/>
+                            <DashboardLastDraw lastDraw="Object.values(statistics.last_draws || {})" onClickGame.bind="onClickGame"/>
                         </div>
                     </div>
 

@@ -46,3 +46,9 @@ class APIFootballConnector:
             'timezone': "America/Bogota"
         }
         return self._make_request('fixtures', params)
+
+    def get_prediction(self, prediction_id: int):
+        params = {
+            'fixture': prediction_id,
+        }
+        return self._make_request('predictions', params)
