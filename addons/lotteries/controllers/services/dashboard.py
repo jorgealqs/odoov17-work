@@ -1,13 +1,10 @@
 import logging
 from odoo.http import request
-# from datetime import datetime
-# import pytz
 from babel.dates import format_date
 from itertools import combinations
 from collections import defaultdict
 import pandas as pd
 import numpy as np
-# import requests
 
 _logger = logging.getLogger(__name__)
 
@@ -49,13 +46,10 @@ def get_last_raws(limit_per_game=1):
             order='draw_date desc'
         )
         if draw:
-            # Formatear fecha en español
-            draw_date_str = format_date(
-                draw.draw_date, format='long', locale='es_ES'
-            )
             result[game.name] = {
                 'id': draw.id,
-                'draw_date': draw_date_str,
+                'winner': draw.win,
+                'draw_date': draw.draw_date,
                 'name': game.name,
                 'name_id': game.id,
                 'numbers': [{

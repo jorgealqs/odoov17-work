@@ -10,13 +10,25 @@ class LotteryImporterMedellin(models.AbstractModel):
     _name = 'lottery.importer.medellin'
     _description = 'Importador de resultados Lotería de Medellín'
 
-    NUM = {"4781"}
-
     @api.model
     def run_import(self, game):
         try:
-            for num in self.NUM:
-                data = self._extract_data(game, int(num))
+            last_draw = self.env['lottery.draw'].search(
+                [('game_id', '=', game.id)],
+                order='draw_number desc',
+                limit=1
+            )
+
+            if last_draw:
+                next_draw_number = int(last_draw.draw_number) + 1
+            else:
+                next_draw_number = 1
+
+            _logger.info(f"\n\n {next_draw_number} \n\n")
+
+            # Importar el nuevo sorteo
+            data = self._extract_data(game, next_draw_number)
+            if data.get('number'):  # solo guardar si hay datos
                 self._save_data(data, game)
         except requests.exceptions.HTTPError as http_err:
             _logger.error(f"❌ Error HTTP al acceder a {http_err}")
