@@ -1,4 +1,5 @@
 import logging
+from time import sleep
 from odoo import models, fields
 from .api_football_connector import APIFootballConnector
 from datetime import datetime
@@ -56,5 +57,6 @@ class SportsTrackPredictions(models.Model):
                     'percent_draw': prediction.get('percent', {}).get('draw'),
                     'percent_away': prediction.get('percent', {}).get('away'),
                 }
-                _logger.info(f"\n\n {vals_prediction} \n\n")
+                _logger.info(f"\n\n {fixture_id} -- {vals_prediction} \n\n")
                 self.create(vals_prediction)
+                sleep(5)

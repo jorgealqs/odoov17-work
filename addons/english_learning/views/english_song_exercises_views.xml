@@ -1,0 +1,77 @@
+<odoo>
+    <!-- Tree View -->
+    <record id="view_english_exercise_song_tree" model="ir.ui.view">
+        <field name="name">english.exercise.song.tree</field>
+        <field name="model">english.exercise.song</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="song_id"/>
+                <field name="exercise_type"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="view_english_exercise_song_form" model="ir.ui.view">
+        <field name="name">english.exercise.song.form</field>
+        <field name="model">english.exercise.song</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="song_id"/>
+                        <field name="exercise_type"/>
+                    </group>
+                    <group>
+                        <field name="description" widget="text"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Kanban View -->
+    <record id="view_english_exercise_song_kanban" model="ir.ui.view">
+        <field name="name">english.exercise.song.kanban</field>
+        <field name="model">english.exercise.song</field>
+        <field name="arch" type="xml">
+            <kanban>
+                <field name="name"/>
+                <field name="song_id"/>
+                <field name="exercise_type"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_card mb-4 oe_kanban_global_click" style="padding: 16px; border-radius: 12px; border: 1px solid #ddd; background-color: #f9f9f9; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
+                            <!-- Exercise Name -->
+                            <div style="font-size: 16px; font-weight: bold; color: #34495e; margin-bottom: 8px;">
+                                <field name="name"/>
+                            </div>
+                            <!-- Related Song -->
+                            <div style="font-size: 14px; color: #7f8c8d; margin-bottom: 8px;">
+                                Song: <field name="song_id"/>
+                            </div>
+                            <!-- Exercise Type -->
+                            <div style="font-size: 12px; color: #888;">
+                                Type: <field name="exercise_type"/>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_english_exercise_song" model="ir.actions.act_window">
+        <field name="name">Song Exercises</field>
+        <field name="res_model">english.exercise.song</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Click to create a new Song Exercise.
+            </p>
+        </field>
+    </record>
+</odoo>

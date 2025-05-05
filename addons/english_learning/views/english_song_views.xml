@@ -1,0 +1,103 @@
+<odoo>
+    <!-- Tree View -->
+    <record id="view_english_song_tree" model="ir.ui.view">
+        <field name="name">english.song.tree</field>
+        <field name="model">english.song</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="title"/>
+                <field name="artist"/>
+                <field name="level_estimate"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="view_english_song_form" model="ir.ui.view">
+        <field name="name">english.song.form</field>
+        <field name="model">english.song</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="title"/>
+                        <field name="artist"/>
+                        <field name="level_estimate"/>
+                    </group>
+                    <group>
+                        <field name="lyrics"/>
+                        <field name="difficult_words" readonly="1"/>
+                        <field name="youtube_url" widget="url"/>
+                    </group>
+                    <notebook>
+                        <page string="">
+                            <field name="exercise_ids" readonly="1"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Kanban View -->
+    <record id="view_english_song_kanban" model="ir.ui.view">
+        <field name="name">english.song.kanban</field>
+        <field name="model">english.song</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="level_estimate">
+                <field name="title"/>
+                <field name="artist"/>
+                <field name="level_estimate"/>
+                <field name="lyrics"/>
+                <field name="youtube_url"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_card mb-4 oe_kanban_global_click" style="padding: 16px; border-radius: 12px; border: 1px solid #ddd; background-color: #f9f9f9; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
+
+                            <!-- Title -->
+                            <div style="font-size: 16px; font-weight: bold; color: #34495e; margin-bottom: 8px;">
+                                <field name="title"/>
+                            </div>
+
+                            <!-- Artist -->
+                            <div style="font-size: 14px; color: #7f8c8d; margin-bottom: 8px;">
+                                Artist: <field name="artist"/>
+                            </div>
+
+                            <!-- YouTube Link -->
+                            <t t-if="record.youtube_url.raw_value">
+                                <div style="margin-bottom: 8px;">
+                                    <a t-att-href="record.youtube_url.raw_value" target="_blank" style="font-size: 13px; color: #2980b9;">
+                                        🎬 Watch on YouTube
+                                    </a>
+                                </div>
+                            </t>
+
+                            <!-- Lyrics (Preview) -->
+                            <div t-if="record.lyrics.raw_value" style="font-size: 13px; color: #34495e; max-height: 100px; overflow: hidden; text-overflow: ellipsis; margin-bottom: 12px;">
+                                <t t-out="record.lyrics.raw_value"/>
+                            </div>
+
+                            <!-- Level Estimate -->
+                            <div style="font-size: 12px; color: #888;">
+                                Level: <field name="level_estimate"/>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_english_song" model="ir.actions.act_window">
+        <field name="name">English Songs</field>
+        <field name="res_model">english.song</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Click to create a new English Song.
+            </p>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,100 @@
+<odoo>
+    <!-- Tree View -->
+    <record id="view_english_lesson_tree" model="ir.ui.view">
+        <field name="name">english.lesson.tree</field>
+        <field name="model">english.lesson</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="topic_id"/>
+                <field name="media_url" widget="url" optional="hide"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="view_english_lesson_form" model="ir.ui.view">
+        <field name="name">english.lesson.form</field>
+        <field name="model">english.lesson</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="topic_id"/>
+                        <field name="media_url"/>
+                    </group>
+                    <!-- Pestañas -->
+                    <notebook>
+                        <page string="Content">
+                            <field name="content"/>
+                        </page>
+                        <page string="Exercies">
+                            <field name="exercise_ids"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Kanban View -->
+    <record id="view_english_lesson_kanban" model="ir.ui.view">
+        <field name="name">english.lesson.kanban</field>
+        <field name="model">english.lesson</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_small_column" default_group_by="topic_id">
+                <field name="name"/>
+                <field name="topic_id"/>
+                <field name="media_url"/>
+                <field name="content"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_card oe_kanban_global_click shadow-sm mb-4" style="padding: 20px; border-radius: 16px; border: 1px solid #ddd; background-color: #ffffff; transition: box-shadow 0.3s ease;">
+
+                            <!-- Header: Icon + Title -->
+                            <div style="display: flex; align-items: center; margin-bottom: 12px;">
+                                <span style="font-size: 22px; margin-right: 8px;">📘</span>
+                                <div style="font-size: 18px; font-weight: bold; color: #2c3e50;">
+                                    <field name="name"/>
+                                </div>
+                            </div>
+
+                            <!-- Topic -->
+                            <div style="font-size: 14px; color: #7f8c8d; margin-bottom: 12px;">
+                                🏷️ <strong>Topic:</strong> <field name="topic_id"/>
+                            </div>
+
+                            <!-- Content Preview -->
+                            <div t-if="record.content.raw_value" style="font-size: 13px; color: #34495e; max-height: 100px; overflow: hidden; text-overflow: ellipsis; margin-bottom: 12px;">
+                                <t t-out="record.content.raw_value"/>
+                            </div>
+
+                            <!-- Divider -->
+                            <div style="height: 1px; background-color: #ecf0f1; margin: 12px 0;"></div>
+
+                            <!-- Video Link -->
+                            <div t-if="record.media_url.raw_value" style="text-align: center;">
+                                <a t-att-href="record.media_url.raw_value" target="_blank" style="display: inline-block; padding: 8px 16px; background-color: #3498db; color: white; border-radius: 8px; font-weight: 500; text-decoration: none;">
+                                    ▶️ Watch Video
+                                </a>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_english_lesson" model="ir.actions.act_window">
+        <field name="name">English Lessons</field>
+        <field name="res_model">english.lesson</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Click to create a new English Lesson.
+            </p>
+        </field>
+    </record>
+</odoo>

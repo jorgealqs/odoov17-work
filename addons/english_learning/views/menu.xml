@@ -1,0 +1,21 @@
+<odoo>
+    <!-- Root Menu -->
+    <menuitem id="menu_english_learning_root" name="English Learning" sequence="1"/>
+
+    <!-- Submenu: Settings -->
+    <menuitem id="menu_english_learning_settings" name="Settings" parent="menu_english_learning_root" sequence="10"/>
+
+    <!-- Submenu Item: English Levels -->
+    <menuitem id="menu_english_learning_english_levels" name="English Levels" parent="menu_english_learning_settings" action="action_english_level" sequence="20"/>
+
+    <menuitem id="menu_english_learning_english_topics" name="English Topics" parent="menu_english_learning_settings" action="action_english_topic" sequence="30"/>
+
+    <menuitem id="menu_english_learning_english_lesson" name="English Lessons" parent="menu_english_learning_settings" action="action_english_lesson" sequence="40"/>
+
+    <menuitem id="menu_english_learning_english_exercise" name="English Exercises" parent="menu_english_learning_settings" action="action_english_exercise" sequence="50"/>
+
+    <menuitem id="menu_english_learning_english_song" name="English Songs" parent="menu_english_learning_settings" action="action_english_song" sequence="60"/>
+
+    <menuitem id="menu_english_learning_english_exercise_song" name="English Exercise Song" parent="menu_english_learning_settings" action="action_english_exercise_song" sequence="70"/>
+
+</odoo>

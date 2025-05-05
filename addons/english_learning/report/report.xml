@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="report_song">
+        <t t-call="web.basic_layout">
+            <t t-foreach="docs" t-as="song">
+                <div class="page container my-4">
+                    <!-- Título -->
+                    <div class="text-center mb-4">
+                        <h2 class="text-primary">🎵 Song: <t t-esc="song.title"/></h2>
+                        <p class="text-muted mb-1"><strong>Artist:</strong> <t t-esc="song.artist"/></p>
+                        <p class="text-muted mb-1"><strong>Level:</strong> <t t-esc="song.level_estimate"/></p>
+                        <p t-if="song.youtube_url" class="text-muted mb-3">
+                            <strong>YouTube:</strong>
+                            <a t-att-href="song.youtube_url" class="text-decoration-none text-info" target="_blank">
+                                <t t-esc="song.youtube_url"/>
+                            </a>
+                        </p>
+                    </div>
+
+                    <!-- Lyrics -->
+                    <div t-if="song.lyrics" class="mb-4">
+                        <h4 class="text-secondary">📝 Lyrics</h4>
+                        <div class="border rounded p-3 bg-light" t-out="song.lyrics"/>
+                    </div>
+
+                    <!-- Difficult Words -->
+                    <div t-if="song.difficult_words" class="mb-4">
+                        <h4 class="text-secondary">📚 Difficult Words</h4>
+                        <p class="border p-2 bg-white"><t t-esc="song.difficult_words"/></p>
+                    </div>
+                </div>
+            </t>
+        </t>
+    </template>
+
+    <!-- Acción del reporte -->
+    <record id="report_english_song_action" model="ir.actions.report">
+        <field name="name">Song</field>
+        <field name="model">english.song</field>
+        <field name="report_type">qweb-html</field>
+        <field name="report_name">english_learning.report_song</field>
+        <field name="report_file">english_learning.report_song</field>
+        <field name="binding_model_id" ref="model_english_song"/>
+        <field name="binding_type">report</field>
+        <field name="print_report_name">'%s - %s' % (object.title, object.artist)</field>
+    </record>
+
+</odoo>

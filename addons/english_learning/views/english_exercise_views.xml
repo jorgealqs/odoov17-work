@@ -1,0 +1,82 @@
+<odoo>
+    <!-- Tree View -->
+    <record id="view_english_exercise_tree" model="ir.ui.view">
+        <field name="name">english.exercise.tree</field>
+        <field name="model">english.exercise</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="question"/>
+                <field name="type_question"/>
+                <field name="lesson_id"/>
+                <field name="correct_answer" optional="hide"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="view_english_exercise_form" model="ir.ui.view">
+        <field name="name">english.exercise.form</field>
+        <field name="model">english.exercise</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="question"/>
+                        <field name="type_question"/>
+                        <field name="lesson_id"/>
+                    </group>
+                    <group string="Options" colspan="4">
+                        <field name="option_a"/>
+                        <field name="option_b"/>
+                        <field name="option_c"/>
+                        <field name="option_d"/>
+                    </group>
+                    <group>
+                        <field name="correct_answer"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Kanban View -->
+    <record id="view_english_exercise_kanban" model="ir.ui.view">
+        <field name="name">english.exercise.kanban</field>
+        <field name="model">english.exercise</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="type_question" class="o_kanban_small_column">
+                <field name="question"/>
+                <field name="type_question"/>
+                <field name="lesson_id"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_card oe_kanban_global_click mb-4" style="padding: 16px; border-radius: 12px; border: 1px solid #dcdde1; background-color: #f9f9fb; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+
+                            <!-- Pregunta -->
+                            <div style="font-size: 16px; font-weight: bold; color: #2d3436; margin-bottom: 10px;">
+                                <field name="question"/>
+                            </div>
+
+                            <!-- Lección relacionada -->
+                            <div style="font-size: 13px; color: #636e72;">
+                                📘 <b>Lesson:</b> <field name="lesson_id"/>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_english_exercise" model="ir.actions.act_window">
+        <field name="name">English Exercises</field>
+        <field name="res_model">english.exercise</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Click to create a new English Exercise.
+            </p>
+        </field>
+    </record>
+</odoo>

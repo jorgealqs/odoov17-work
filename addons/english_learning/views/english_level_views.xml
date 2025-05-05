@@ -1,0 +1,108 @@
+<odoo>
+
+    <!-- Tree View -->
+    <record id="view_english_level_tree" model="ir.ui.view">
+        <field name="name">english.level.tree</field>
+        <field name="model">english.level</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="create_date"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_english_level_form" model="ir.ui.view">
+        <field name="name">english.level.form</field>
+        <field name="model">english.level</field>
+        <field name="arch" type="xml">
+            <form string="English Level" class="o_form_view">
+                <sheet>
+                    <div class="o_form_sheet_bg">
+                        <div class="o_form_sheet">
+                            <!-- Encabezado -->
+                            <div class="o_group">
+                                <group class="o_inner_group">
+                                    <field name="name" class="o_half" placeholder="e.g. A1, A2, B1..."/>
+                                    <field name="description" class="o_half"/>
+                                </group>
+                            </div>
+                            <!-- Pestañas -->
+                            <notebook class="o_notebook">
+                                <!-- Página de Topics -->
+                                <page string="Topics">
+                                    <field name="topic_ids" context="{'default_level_id': active_id}">
+                                        <tree editable="bottom">
+                                            <field name="name"/>
+                                            <field name="description"/>
+                                        </tree>
+                                    </field>
+                                </page>
+                            </notebook>
+                        </div>
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Search View -->
+    <record id="view_english_level_search" model="ir.ui.view">
+        <field name="name">english.level.search</field>
+        <field name="model">english.level</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+            </search>
+        </field>
+    </record>
+
+    <!-- Kanban View -->
+    <record id="view_english_level_kanban" model="ir.ui.view">
+        <field name="name">english.level.kanban</field>
+        <field name="model">english.level</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_small_column">
+                <field name="name"/>
+                <field name="description"/>
+                <field name="create_date"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_card oe_kanban_global_click shadow-sm" style="padding: 16px; border-radius: 12px; border: 1px solid #e0e0e0; background-color: #fafafa;">
+                            <!-- Nombre del Nivel -->
+                            <div style="margin-bottom: 12px;">
+                                <span style="font-size: 18px; font-weight: bold; color: #34495e;">
+                                    <field name="name"/>
+                                </span>
+                            </div>
+
+                            <!-- Descripción -->
+                            <div style="margin-bottom: 12px; color: #555; font-size: 14px;">
+                                <field name="description"/>
+                            </div>
+
+                            <!-- Fecha de creación -->
+                            <div style="font-size: 12px; color: #888; text-align: right;">
+                                <i class="fa fa-calendar" style="margin-right: 4px;"></i>
+                                <field name="create_date" options="{'widget': 'datetime'}"/>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_english_level" model="ir.actions.act_window">
+        <field name="name">English Levels</field>
+        <field name="res_model">english.level</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Click to create a new English Level.
+            </p>
+        </field>
+    </record>
+
+</odoo>
