@@ -82,6 +82,23 @@ class SportsTrackFixture(models.Model):
             except ValueError:
                 match_date = False
 
+            home_team_id = self._get_team_id(
+                team_id=teams_data.get('home', {}).get('id'),
+                league_id=league.get('id'),
+                session_id=session.get('id')
+            )
+
+            away_team_id = self._get_team_id(
+                team_id=teams_data.get('away', {}).get('id'),
+                league_id=league.get('id'),
+                session_id=session.get('id')
+            )
+
+            # Si alguno no existe, no creamos el fixture
+            if not home_team_id or not away_team_id:
+                _logger.warning(f"Fixture omitido: home_team_id={home_team_id}, away_team_id={away_team_id}")
+                continue
+
             vals_fixture = {
                 "country_id": country.get('id') or False,
                 "session_id": session.get('id') or False,
@@ -91,16 +108,8 @@ class SportsTrackFixture(models.Model):
                 "timezone": fixture_data.get('timezone') or False,
                 "match_date": match_date,
                 "match_timestamp": fixture_data.get('timestamp') or False,
-                "home_team_id": self._get_team_id(
-                    team_id=teams_data.get('home', {}).get('id'),
-                    league_id=league.get('id'),
-                    session_id=session.get('id')
-                ) or False,
-                "away_team_id": self._get_team_id(
-                    team_id=teams_data.get('away', {}).get('id'),
-                    league_id=league.get('id'),
-                    session_id=session.get('id')
-                ) or False,
+                "home_team_id": home_team_id,
+                "away_team_id": away_team_id,
                 "home_goals": goals_data.get(
                     'home'
                 ) if goals_data.get('home') is not None else False,
