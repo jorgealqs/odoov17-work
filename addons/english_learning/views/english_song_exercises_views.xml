@@ -17,16 +17,45 @@
         <field name="name">english.exercise.song.form</field>
         <field name="model">english.exercise.song</field>
         <field name="arch" type="xml">
-            <form>
+            <form string="Exercise Based on Song">
                 <sheet>
                     <group>
-                        <field name="name"/>
-                        <field name="song_id"/>
-                        <field name="exercise_type"/>
+                        <group>
+                            <field name="name"/>
+                            <field name="song_id"/>
+                            <field name="exercise_type"/>
+                            <field name="estimated_time"/>
+                            <field name="tags"/>
+                        </group>
+                        <group>
+                            <field name="description"/>
+                        </group>
                     </group>
-                    <group>
-                        <field name="description" widget="text"/>
-                    </group>
+
+                    <notebook>
+                        <page string="Questions">
+                            <field name="question_ids">
+                                <tree editable="bottom">
+                                    <field name="question_text"/>
+                                    <field name="question_type"/>
+                                    <field name="correct_answer"/>
+                                </tree>
+                                <form>
+                                    <sheet>
+                                        <group>
+                                            <field name="question_text"/>
+                                            <field name="question_type"/>
+                                            <field name="correct_answer"/>
+                                        </group>
+                                        <group>
+                                            <field name="options" attrs="{'invisible': [('question_type', '!=', 'multiple_choice')]}"/>
+                                            <field name="feedback"/>
+                                        </group>
+                                    </sheet>
+                                </form>
+                            </field>
+                        </page>
+                    </notebook>
                 </sheet>
             </form>
         </field>

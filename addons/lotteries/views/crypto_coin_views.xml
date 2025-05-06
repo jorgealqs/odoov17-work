@@ -28,7 +28,8 @@
         <field name="name">crypto.coin.tree</field>
         <field name="model">crypto.coin</field>
         <field name="arch" type="xml">
-            <tree string="Cryptocurrencies" default_order="name">
+            <tree string="Cryptocurrencies">
+                <field name="sequence" widget="handle"/>
                 <field name="name"/>
                 <field name="symbol"/>
                 <field name="logo" widget="image_url" options="{'size': [50, 50]}"/>
