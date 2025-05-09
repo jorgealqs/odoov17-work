@@ -1,0 +1,102 @@
+<odoo>
+    <!-- Tree View -->
+    <record id="view_english_dictionary_tree" model="ir.ui.view">
+        <field name="name">english.dictionary.tree</field>
+        <field name="model">english.dictionary</field>
+        <field name="arch" type="xml">
+            <tree string="Dictionary Words">
+                <field name="word"/>
+                <field name="part_of_speech"/>
+                <field name="definition" optional="show"/>
+                <field name="example_sentence" optional="show"/>
+                <field name="translation" optional="hide"/>
+                <field name="audio_url" optional="hide"/>
+                <field name="tag_ids" optional="hide" widget="many2many_tags" options="{'color_field': 'color'}"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View with Font Awesome icons -->
+    <record id="view_english_dictionary_form" model="ir.ui.view">
+        <field name="name">english.dictionary.form</field>
+        <field name="model">english.dictionary</field>
+        <field name="arch" type="xml">
+            <form string="📘 Dictionary Entry">
+                <sheet>
+                    <!-- Título principal -->
+                    <div class="oe_title">
+                        <h2 class="mb-2" style="font-size: 22px;">
+                            <i class="fa fa-book text-primary"/> Dictionary Entry
+                        </h2>
+                    </div>
+
+                    <!-- Grupo principal: Palabra y tipo -->
+                    <group>
+                        <field name="word" placeholder="e.g. run" required="1"/>
+                        <field name="part_of_speech" required="1"/>
+                    </group>
+
+                    <!-- Cuaderno de páginas -->
+                    <notebook>
+                        <!-- Página de definición -->
+                        <page string="📝 Definition">
+                            <group>
+                                <label for="definition"/>
+                                <div>
+                                    <i class="fa fa-pencil-alt text-info"/>
+                                    <field name="definition" placeholder="Define the word clearly" required="1"/>
+                                </div>
+                            </group>
+                        </page>
+
+                        <!-- Página de uso y traducción -->
+                        <page string="📚 Usage Context">
+                            <group>
+                                <label for="example_sentence"/>
+                                <div>
+                                    <i class="fa fa-lightbulb text-warning"/>
+                                    <field name="example_sentence" placeholder="Use the word in a meaningful sentence"/>
+                                </div>
+
+                                <label for="translation"/>
+                                <div>
+                                    <i class="fa fa-language text-success"/>
+                                    <field name="translation" placeholder="Traducción (opcional)"/>
+                                </div>
+                            </group>
+                        </page>
+
+                        <!-- Página de audio y etiquetas -->
+                        <page string="🔊 Pronunciation Tags">
+                            <group>
+                                <label for="audio_url"/>
+                                <div>
+                                    <i class="fa fa-volume-up text-danger"/>
+                                    <field name="audio_url" placeholder="https://audio-link.com/word.mp3"/>
+                                </div>
+
+                                <label for="tag_ids"/>
+                                <div>
+                                    <i class="fa fa-tags text-muted"/>
+                                    <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color', 'no_edit_color': true}"/>
+                                </div>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_english_dictionary" model="ir.actions.act_window">
+        <field name="name">English Dictionary</field>
+        <field name="res_model">english.dictionary</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                <i class="fa fa-book"/> Click to create a new word entry in your dictionary.
+            </p>
+        </field>
+    </record>
+</odoo>
