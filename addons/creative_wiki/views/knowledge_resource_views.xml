@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="knowledge_resource_view_form" model="ir.ui.view">
+        <field name="name">knowledge.resource.form</field>
+        <field name="model">knowledge.resource</field>
+        <field name="arch" type="xml">
+            <form string="Resource" class="o_knowledge_form_view">
+                <header>
+                    <!-- Add buttons here if needed -->
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name" class="oe_edit_only" string="Title"/>
+                        <h1>
+                            <field name="name" placeholder="Resource title..."/>
+                        </h1>
+                    </div>
+                    <group>
+                        <field name="url"/>
+                        <field name="category_id"/>
+                        <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                    </group>
+                    <notebook>
+                        <page string="Description">
+                            <field name="description" placeholder="Add your notes here..." widget="html"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- model.name tree view -->
+    <record id="knowledge_resource_view_tree" model="ir.ui.view">
+        <field name="name">knowledge.resource.tree</field>
+        <field name="model">knowledge.resource</field>
+        <field name="arch" type="xml">
+            <tree string="Knowledge Resources" default_order="name">
+                <field name="name"/>
+                <field name="url" widget="url"/>
+                <field name="category_id"/>
+                <field name="tag_ids" optional="show" widget="many2many_tags" options="{'color_field': 'color'}"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- model.name action window -->
+    <record id="knowledge_resource_action" model="ir.actions.act_window">
+        <field name="name">Resource</field>
+        <field name="res_model">knowledge.resource</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_empty_folder">
+                Create a new resource, click button New
+            </p>
+        </field>
+    </record>
+
+</odoo>

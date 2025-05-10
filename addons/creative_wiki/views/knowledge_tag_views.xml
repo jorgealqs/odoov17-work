@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- model.name tree view -->
+    <record id="knowledge_tag_view_tree" model="ir.ui.view">
+        <field name="name">knowledge.resource.tree</field>
+        <field name="model">knowledge.tag</field>
+        <field name="arch" type="xml">
+            <tree string="Tags" editable="top" sample="1" multi_edit="1" default_order="name">
+                <field name="name"/>
+                <field name="color" widget="color_picker" optional="show"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- model.name action window -->
+    <record id="knowledge_tag_action" model="ir.actions.act_window">
+        <field name="name">Tag</field>
+        <field name="res_model">knowledge.tag</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_empty_folder">
+                Create a new tag, click button New
+            </p>
+        </field>
+    </record>
+
+</odoo>

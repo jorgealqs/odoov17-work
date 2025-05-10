@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <menuitem id="knowledge_menu_root" name="Knowledge" sequence="10"/>
+
+    <menuitem
+        id="knowledge_category_menu"
+        name="Settings"
+        parent="knowledge_menu_root"
+        sequence="10"/>
+
+    <menuitem
+        id="knowledge_category_submenu"
+        name="Category"
+        action="knowledge_category_action"
+        parent="knowledge_category_menu"
+        sequence="10"/>
+
+    <menuitem
+        id="knowledge_note_submenu"
+        name="Note"
+        action="knowledge_note_action"
+        parent="knowledge_category_menu"
+        sequence="20"/>
+
+    <menuitem
+        id="knowledge_resource_submenu"
+        name="Resource"
+        action="knowledge_resource_action"
+        parent="knowledge_category_menu"
+        sequence="30"/>
+
+    <menuitem
+        id="knowledge_tag_submenu"
+        name="Tags"
+        action="knowledge_tag_action"
+        parent="knowledge_category_menu"
+        sequence="40"/>
+
+</odoo>
