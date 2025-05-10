@@ -1,6 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
+    <record id="view_kanban_knowledge_resource" model="ir.ui.view">
+        <field name="name">knowledge.resource.kanban</field>
+        <field name="model">knowledge.resource</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_knowledge_resource" default_group_by="category_id">
+                <field name="name"/>
+                <field name="url"/>
+                <field name="description"/>
+                <field name="category_id"/>
+                <field name="tag_ids"/>
+
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_card oe_kanban_global_click shadow-sm mb-4" style="padding: 20px; border-radius: 16px; border: 1px solid #ddd; background-color: #ffffff; transition: box-shadow 0.3s ease;">
+
+                            <!-- Header: Icon + Title -->
+                            <div style="display: flex; align-items: center; margin-bottom: 12px;">
+                                <span style="font-size: 22px; margin-right: 8px;">🔗</span>
+                                <div style="font-size: 18px; font-weight: bold; color: #2c3e50;">
+                                    <field name="name"/>
+                                </div>
+                            </div>
+
+                            <!-- URL -->
+                            <div t-if="record.url.raw_value" style="font-size: 13px; color: #2980b9; margin-bottom: 12px;">
+                                🌐 <a t-att-href="record.url.raw_value" target="_blank" style="text-decoration: underline; color: #2980b9;">
+                                    <t t-out="record.url.raw_value"/>
+                                </a>
+                            </div>
+
+                            <!-- Description Preview -->
+                            <div t-if="record.description.raw_value" style="font-size: 13px; color: #34495e; max-height: 150px; overflow: hidden; text-overflow: ellipsis; margin-bottom: 12px;">
+                                <t t-out="record.description.raw_value"/>
+                            </div>
+
+                            <!-- Divider -->
+                            <div style="height: 1px; background-color: #ecf0f1; margin: 12px 0;"></div>
+
+                            <!-- Tags -->
+                            <div class="o_kanban_tags">
+                                <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
     <record id="knowledge_resource_view_form" model="ir.ui.view">
         <field name="name">knowledge.resource.form</field>
         <field name="model">knowledge.resource</field>
@@ -23,7 +72,7 @@
                     </group>
                     <notebook>
                         <page string="Description">
-                            <field name="description" placeholder="Add your notes here..." widget="html"/>
+                            <field name="description" placeholder="Add your notes here..."/>
                         </page>
                     </notebook>
                 </sheet>
@@ -49,7 +98,7 @@
     <record id="knowledge_resource_action" model="ir.actions.act_window">
         <field name="name">Resource</field>
         <field name="res_model">knowledge.resource</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">kanban,tree,form</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_empty_folder">
                 Create a new resource, click button New

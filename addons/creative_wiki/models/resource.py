@@ -7,7 +7,7 @@ class KnowledgeResource(models.Model):
 
     name = fields.Char(string='Title', required=True)
     url = fields.Char(string='Url')
-    description = fields.Text(string='Description')
+    description = fields.Html(string='Description')
     category_id = fields.Many2one(
         'knowledge.category',
         string='Category'

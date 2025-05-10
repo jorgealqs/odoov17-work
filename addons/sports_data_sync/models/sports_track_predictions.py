@@ -59,4 +59,4 @@ class SportsTrackPredictions(models.Model):
                 }
                 _logger.info(f"\n\n {fixture_id} -- {vals_prediction} \n\n")
                 self.create(vals_prediction)
-                sleep(9)
+                sleep(5)

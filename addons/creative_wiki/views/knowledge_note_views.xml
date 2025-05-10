@@ -1,6 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
+    <record id="knowledge_note_view_kanban" model="ir.ui.view">
+        <field name="name">knowledge.note.kanban</field>
+        <field name="model">knowledge.note</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_knowledge_note" default_group_by="category_id">
+                <field name="name"/>
+                <field name="type_note"/>
+                <field name="category_id"/>
+                <field name="tag_ids"/>
+                <field name="content"/>
+
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_card oe_kanban_global_click shadow-sm mb-4" style="padding: 20px; border-radius: 16px; border: 1px solid #ddd; background-color: #ffffff; transition: box-shadow 0.3s ease;">
+
+                            <!-- Header: Icon + Title -->
+                            <div style="display: flex; align-items: center; margin-bottom: 12px;">
+                                <span style="font-size: 22px; margin-right: 8px;">📘</span>
+                                <div style="font-size: 18px; font-weight: bold; color: #2c3e50;">
+                                    <field name="name"/>
+                                </div>
+                            </div>
+
+                            <!-- Topic -->
+                            <div style="font-size: 14px; color: #7f8c8d; margin-bottom: 12px;">
+                                🏷️ <strong>Type:</strong> <field name="type_note"/>
+                            </div>
+
+                            <!-- Content Preview -->
+                            <div t-if="record.content.raw_value" style="font-size: 13px; color: #34495e; max-height: 300px; overflow: hidden; text-overflow: ellipsis; margin-bottom: 12px;">
+                                <t t-out="record.content.raw_value"/>
+                            </div>
+
+                            <!-- Divider -->
+                            <div style="height: 1px; background-color: #ecf0f1; margin: 12px 0;"></div>
+
+                            <!-- Tags -->
+                            <div class="o_kanban_tags">
+                                <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
     <record id="knowledge_note_view_form" model="ir.ui.view">
         <field name="name">knowledge.note.form</field>
         <field name="model">knowledge.note</field>
@@ -49,7 +96,7 @@
     <record id="knowledge_note_action" model="ir.actions.act_window">
         <field name="name">Note</field>
         <field name="res_model">knowledge.note</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">kanban,tree,form</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_empty_folder">
                 Create a new note, click button New
