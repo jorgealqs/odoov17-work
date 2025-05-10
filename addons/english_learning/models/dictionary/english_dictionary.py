@@ -1,4 +1,7 @@
 from odoo import models, fields
+import logging
+
+_logger = logging.getLogger(__name__)
 
 
 class EnglishDictionary(models.Model):
@@ -30,3 +33,6 @@ class EnglishDictionary(models.Model):
             'The word must be unique in the dictionary.'
         )
     ]
+
+    def send_telegram(self):
+        _logger.info(f"\n\n Llegaste \n")

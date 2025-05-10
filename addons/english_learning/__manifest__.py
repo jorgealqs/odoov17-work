@@ -16,6 +16,7 @@
         'views/english_song_exercises_views.xml',
         'views/english_dictionary_views.xml',
         'views/english_tag_views.xml',
+        'data/cron.xml',
         'report/report.xml',
         'views/menu.xml',
     ],
