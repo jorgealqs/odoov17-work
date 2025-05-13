@@ -1,0 +1,75 @@
+<templates xml:space="preserve">
+    <t t-name="creative_wiki.DashboardNotes">
+        <div class="container-fluid">
+            <div class="row g-4">
+                <t t-foreach="formattedNotes" t-as="note" t-key="note.id">
+                    <div class="col-12">
+                        <div class="bg-white shadow-sm p-4 rounded-3 border-start border-5 border-info position-relative">
+
+                            <!-- Icono de tipo flotante -->
+                            <span class="position-absolute top-0 start-0 translate-middle badge rounded-pill bg-info shadow-sm" style="font-size: 1rem; padding: 8px 10px; margin-top: 12px; margin-left: -10px;">
+                                📘
+                            </span>
+
+                            <!-- Título -->
+                            <h5 class="text-dark fw-semibold mb-2">
+                                <t t-esc="note.name"/>
+                            </h5>
+
+                            <!-- Tipo -->
+                            <div class="text-secondary mb-1" style="font-size: 13px;">
+                                🏷️ <strong>Type:</strong>
+                                <t t-out="{
+                                    'idea': 'Idea 💡',
+                                    'note': 'Note 📝',
+                                    'blog_draft': 'Blog Draft 📰',
+                                    'log': 'Logbook 📓'
+                                }[note.type_note] || 'Note 📝'"/>
+                            </div>
+
+                            <!-- Contenido -->
+                            <div class="mb-3 overflow-auto" style="font-size: 13px; color: #34495e; max-height: 300px;">
+                                <t t-out="note.htmlContent"/> <!-- ⬅️ Mostrar HTML procesado -->
+                            </div>
+
+                            <!-- Separador -->
+                            <hr class="my-3"/>
+
+                            <div class="row text-muted align-items-center mt-3">
+
+                                <!-- Categoría -->
+                                <div class="col-md-4 col-12 mb-2 mb-md-0">
+                                    <span class="badge bg-dark-subtle text-dark">
+                                        <i class="fa fa-folder-open me-1 text-muted"></i>
+                                        <t t-esc="note.category_id[1] or 'No Category'"/>
+                                    </span>
+                                </div>
+
+                                <!-- Etiquetas -->
+                                <div class="col-md-4 col-12 mb-2 mb-md-0">
+                                    <div t-if="note.tag_ids.length">
+                                        <t t-foreach="note.tag_ids" t-as="tag" t-key="tag.id">
+                                            <span class="badge rounded-pill bg-light text-dark border me-1">
+                                                <i class="fa fa-tag me-1 text-secondary"></i>
+                                                <t t-esc="tag[1]"/>
+                                            </span>
+                                        </t>
+                                    </div>
+                                </div>
+
+                                <!-- Fecha -->
+                                <div class="col-md-4 col-12 text-md-end text-start">
+                                    <small class="text-muted fst-italic">
+                                        <i class="fa fa-calendar-alt me-1"></i>
+                                        <t t-esc="note.create_date"/>
+                                    </small>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </div>
+        </div>
+    </t>
+</templates>

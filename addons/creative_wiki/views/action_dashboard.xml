@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record model="ir.actions.client" id="knowledge_dashboard_action">
+        <field name="name">Dashboard</field>
+        <field name="tag">creative_wiki.ActionDashboardKnowledge</field>
+    </record>
+
+    <menuitem
+        id="knowledge_dashboard_menu"
+        name="Dashboard"
+        action="knowledge_dashboard_action"
+        parent="creative_wiki.knowledge_menu_root"
+        sequence="1"/>
+
+</odoo>

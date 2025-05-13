@@ -1,0 +1,30 @@
+<templates xml:space="preserve">
+    <t t-name="creative_wiki.DashboardResources">
+        <div class="container-fluid">
+            <div class="row g-4">
+                <t t-foreach="formattedResources" t-as="res" t-key="res.id">
+                    <div class="col-12 col-md-6">
+                        <div class="bg-white shadow-sm p-4 rounded border-start border-4 border-primary h-100">
+
+                            <!-- Título y Enlace -->
+                            <h5 class="mb-2">
+                                <a t-att-href="res.url" target="_blank" class="text-decoration-none text-primary">
+                                    🔗 <t t-esc="res.name"/>
+                                </a>
+                            </h5>
+
+                            <!-- Categoría -->
+                            <div class="mb-2">
+                                <span class="badge bg-dark-subtle text-dark">
+                                    <i class="fa fa-folder-open me-1 text-muted"></i>
+                                    <t t-esc="res.category_id[1] or 'No Category'"/>
+                                </span>
+                            </div>
+
+                        </div>
+                    </div>
+                </t>
+            </div>
+        </div>
+    </t>
+</templates>
