@@ -224,7 +224,7 @@ def get_number_frequency(data):
 
 def get_crypto_data():
     """Fetch current crypto prices for followed
-    coins and store price history."""
+    coins and store price history, including max usd."""
 
     Crypto = request.env['crypto.coin']
     History = request.env['crypto.price.history']
@@ -233,11 +233,20 @@ def get_crypto_data():
     results = []
 
     for coin in followed_coins:
+        # Último precio registrado
         last_price = History.search(
             [('coin_id', '=', coin.id)],
             order='timestamp desc',
             limit=1
         )
+
+        # Precio máximo en USD (entre todos los registros)
+        max_price = History.search(
+            [('coin_id', '=', coin.id)],
+            order='usd desc',
+            limit=1
+        )
+
         if last_price:
             results.append({
                 'coin': coin.name,
@@ -245,6 +254,7 @@ def get_crypto_data():
                 'cop': last_price.cop,
                 'timestamp': last_price.timestamp,
                 'logo': coin.logo,
+                'max_usd': max_price.usd if max_price else 0.0,
             })
 
     return results

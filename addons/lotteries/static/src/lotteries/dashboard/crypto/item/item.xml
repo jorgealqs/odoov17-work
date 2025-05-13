@@ -1,27 +1,46 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<templates xml:space="preserve">
-    <t t-name="lotteries.CryptoCoinItem">
-        <div class="o_dashboard_draws mb-4" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
-            <div class="draw-card" style="background-color: #fff; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); padding: 1rem; text-align: center;">
+<t t-name="lotteries.CryptoCoinItem">
+    <div class="o_dashboard_draws mb-4" style="
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 1rem;
+    ">
+        <div t-attf-style="
+            background-color: #{props.cryptoItem.usd > props.cryptoItem.max_usd ? '#d1f5d3' : '#fff'};
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            font-size: 0.95rem;
+        " class="draw-card">
 
-                <!-- Nombre + Logo -->
-                <div style="display: flex; align-items: center; justify-content: center; gap: 0.5rem; margin-bottom: 0.5rem;">
-                    <img t-att-src="props.cryptoItem.logo" alt="Logo" style="width: 24px; height: 24px; border-radius: 50%;" />
-                    <h3 class="draw-title" style="font-size: 1.2rem; color: #2c3e50; margin: 0;">
-                        <t t-esc="props.cryptoItem.coin" />
-                    </h3>
-                </div>
-
-                <!-- Precio USD -->
-                <p style="font-weight: bold; color: #27ae60; font-size: 1.1rem;">
-                    USD: $<t t-esc="props.cryptoItem.usd.toFixed(2)" />
-                </p>
-
-                <!-- Precio COP -->
-                <p style="color: #2980b9; margin-top: 0.25rem;">
-                    COP: $<t t-esc="props.cryptoItem.cop.toLocaleString('es-CO')" />
-                </p>
+            <!-- Logo + Nombre -->
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                <img t-att-src="props.cryptoItem.logo" alt="Logo" style="width: 28px; height: 28px; border-radius: 50%;" />
+                <span style="font-size: 1rem; font-weight: 600; color: #2c3e50;">
+                    <t t-esc="props.cryptoItem.coin" />
+                </span>
             </div>
+
+            <!-- USD actual + máximo -->
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span style="color: #27ae60; font-weight: bold;">
+                    USD: $<t t-esc="props.cryptoItem.usd.toFixed(2)" />
+                </span>
+                <span style="color: #e67e22;">
+                    Máx: $<t t-esc="props.cryptoItem.max_usd.toFixed(2)" />
+                </span>
+            </div>
+
+            <!-- COP -->
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span style="color: #2980b9;">COP:</span>
+                <span style="color: #2980b9; font-weight: 500;">
+                    $<t t-esc="props.cryptoItem.cop.toLocaleString('es-CO')" />
+                </span>
+            </div>
+
         </div>
-    </t>
-</templates>
+    </div>
+</t>
