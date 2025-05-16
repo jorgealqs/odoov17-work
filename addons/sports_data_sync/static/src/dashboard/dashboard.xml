@@ -9,7 +9,13 @@
                 <button class="btn btn-primary" t-on-click="openLeagues">Leagues</button>
                 <button class="btn btn-primary" t-on-click="openStandings">Standings</button>
                 <button class="btn btn-primary" t-on-click="openFixtures">Fixtures</button>
-                <button class="btn btn-primary hide" t-on-click="openTeams">Teams</button>
+                <button class="btn btn-primary" t-on-click="openTeams">Teams</button>
+            </t>
+
+            <t t-set-slot="control-panel-additional-actions">
+                <button class="btn btn-outline-secondary" t-on-click="doExport">
+                    <i class="fa fa-download me-1"></i> Export
+                </button>
             </t>
 
             <!-- Bienvenida -->
