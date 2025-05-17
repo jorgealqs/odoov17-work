@@ -1,7 +1,7 @@
 import logging
-from odoo.http import request
-from datetime import datetime, timedelta
-import pytz
+from odoo.http import request  # type: ignore
+from datetime import datetime
+import pytz  # type: ignore
 
 _logger = logging.getLogger(__name__)
 
@@ -82,20 +82,35 @@ def get_rounds_leagues(only_ids=False):
             away_id = fixture['away_team_id'][0]
 
             fixture.update({
-                'home_team_rank': standings_dict.get(home_id, {}).get('rank'),
-                'home_team_points': standings_dict.get(home_id, {}).get('points'),
+                'home_team_rank': standings_dict.get(
+                    home_id, {}
+                ).get('rank'),
+                'home_team_points': standings_dict.get(
+                    home_id, {}).get('points'),
                 'away_team_rank': standings_dict.get(away_id, {}).get('rank'),
-                'away_team_points': standings_dict.get(away_id, {}).get('points'),
-                'home_last_matches': get_last_matches(home_id, league['session_id'], league['league_id_table'], fixture['match_date'], 'home'),
-                'away_last_matches': get_last_matches(away_id, league['session_id'], league['league_id_table'], fixture['match_date'], 'away'),
+                'away_team_points': standings_dict.get(
+                    away_id, {}).get('points'),
+                'home_last_matches': get_last_matches(
+                    home_id, league['session_id'],
+                    league['league_id_table'], fixture['match_date'], 'home'),
+                'away_last_matches': get_last_matches(
+                    away_id, league['session_id'],
+                    league['league_id_table'], fixture['match_date'], 'away'),
                 'prediction': get_prediction(fixture['id'])
             })
 
             all_fixtures.append(fixture)
     if only_ids:
-        return [{'id': fixture['id'], 'fixture_api_id':fixture['fixture_api_id']} for fixture in sorted(all_fixtures, key=lambda x: x['match_date'])]
+        return [
+            {
+                'id': fixture['id'],
+                'fixture_api_id': fixture['fixture_api_id']
+            } for fixture in sorted(
+                all_fixtures, key=lambda x: x['match_date'])
+        ]
 
     return sorted(all_fixtures, key=lambda x: x['match_date'])
+
 
 def get_prediction(id_prediction):
     Prediction = request.env['sports.track.predictions']
@@ -103,6 +118,7 @@ def get_prediction(id_prediction):
         ("fixture_id", "=", id_prediction)
     ], limit=1)
     return prediction[0] if prediction else None
+
 
 def get_standings_dict(league_id, session_id):
     standings = request.env['sports.track.standing'].search_read(
@@ -115,7 +131,9 @@ def get_standings_dict(league_id, session_id):
     }
 
 
-def get_upcoming_fixtures(country_id, league_id, session_id, start_date, end_date):
+def get_upcoming_fixtures(
+        country_id, league_id, session_id, start_date, end_date
+):
     return request.env['sports.track.fixture'].search_read(
         [
             ('country_id', '=', country_id),
@@ -143,7 +161,9 @@ def get_last_matches(team_id, session_id, league_id, date, game, limit=5):
 
     matches = Fixture.search_read(
         domain,
-        fields=['match_date', 'home_team_id', 'away_team_id', 'home_goals', 'away_goals'],
+        fields=[
+            'match_date', 'home_team_id', 'away_team_id',
+            'home_goals', 'away_goals'],
         order='match_date desc',
         limit=limit
     )
@@ -151,11 +171,15 @@ def get_last_matches(team_id, session_id, league_id, date, game, limit=5):
     result = []
     for match in matches:
         is_home = match['home_team_id'][0] == team_id
-        opponent = match['away_team_id'][1] if is_home else match['home_team_id'][1]
+        opponent = match[
+            'away_team_id'
+        ][1] if is_home else match['home_team_id'][1]
         goals_for = match['home_goals'] if is_home else match['away_goals']
         goals_against = match['away_goals'] if is_home else match['home_goals']
 
-        outcome = 'Win' if goals_for > goals_against else 'Loss' if goals_for < goals_against else 'Draw'
+        outcome = 'Win' if (
+            goals_for > goals_against
+        ) else 'Loss' if goals_for < goals_against else 'Draw'
 
         result.append({
             'date': match['match_date'],

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="sports_sync_data.ButtonsSports">
+        <div class="d-none d-xl-inline-flex gap-1">
+            <t t-foreach="props.buttons" t-as="button" t-key="button.name">
+                <button
+                    class="btn btn-primary"
+                    t-att-data-model="button.model"
+                    t-on-click="onClick"
+                >
+                    <t t-esc="button.name"/>
+                </button>
+            </t>
+        </div>
+    </t>
+</templates>

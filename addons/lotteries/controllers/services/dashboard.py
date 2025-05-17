@@ -1,9 +1,8 @@
 import logging
-from odoo.http import request
-from babel.dates import format_date
+from odoo.http import request  # type: ignore
 from itertools import combinations
 from collections import defaultdict
-import pandas as pd
+import pandas as pd   # type: ignore
 import numpy as np
 
 _logger = logging.getLogger(__name__)
