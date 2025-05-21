@@ -1,14 +1,9 @@
 <?xml version='1.0' encoding='utf-8'?>
 <odoo>
+
     <record model="ir.actions.client" id="dashboard_sports_sync_data_action">
         <field name="name">Dashboard</field>
         <field name="tag">sports_data_sync.DashboardActionSportsSyncData</field>
     </record>
 
-    <menuitem
-        id="dashboard_sports_sync_menu"
-        name="Dashboard"
-        action="dashboard_sports_sync_data_action"
-        parent="sports_first_level_menu"
-        sequence="10"/>
 </odoo>

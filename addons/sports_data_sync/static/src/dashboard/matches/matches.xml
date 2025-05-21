@@ -3,117 +3,119 @@
     <t t-name="sports_sync_data.Games">
         <div t-ref="root">
             <t t-foreach="props.data" t-as="round" t-key="round.id">
-            <div class="card mb-4 border-1 shadow-lg rounded fade-down rounds-fixture" t-on-click="onClickFetchFixture" style="cursor:pointer;" t-att-data-id="round.id">
-                <div class="card-body p-4">
-                    <!-- Título: Liga y País -->
-                    <div class="d-flex flex-column flex-sm-row justify-content-between align-items-start mb-3">
-                        <div class="text-truncate" style="max-width: 70%;">
-                            <h6 class="mb-0 text-primary font-weight-bold">
-                                <i class="fa fa-trophy mr-2"></i> <t t-esc="round.league_id[1]"/>
-                                (<t t-esc="round.country_id[1]"/>)
-                            </h6>
+                <t t-set="advice_str" t-value="round.prediction and round.prediction.advice or ''"/>
+                <t t-set="has_draw" t-value="advice_str ? (advice_str.toLowerCase().includes('draw') ? true : false) : false"/>
+                <div class="card mb-4 border-1 shadow-lg rounded fade-down rounds-fixture" t-att-class="has_draw ? '' : 'bg-success'" t-on-click="onClickFetchFixture" style="cursor:pointer;" t-att-data-id="round.id">
+                    <div class="card-body p-4">
+                        <!-- Título: Liga y País -->
+                        <div class="d-flex flex-column flex-sm-row justify-content-between align-items-start mb-3">
+                            <div class="text-truncate" style="max-width: 70%;">
+                                <h6 class="mb-0 text-primary font-weight-bold">
+                                    <i class="fa fa-trophy mr-2"></i> <t t-esc="round.league_id[1]"/>
+                                    (<t t-esc="round.country_id[1]"/>)
+                                </h6>
+                            </div>
+                            <div class="text-truncate mt-2 mt-sm-0" style="white-space: nowrap;">
+                                <span class="badge badge-secondary px-4 py-2 text-dark font-weight-semibold" style="font-size: 0.85rem;">
+                                    <i class="fa fa-calendar-alt mr-2"></i>
+                                    <t t-esc="round.match_date"/>
+                                </span>
+                            </div>
                         </div>
-                        <div class="text-truncate mt-2 mt-sm-0" style="white-space: nowrap;">
-                            <span class="badge badge-secondary px-4 py-2 text-dark font-weight-semibold" style="font-size: 0.85rem;">
-                                <i class="fa fa-calendar-alt mr-2"></i>
-                                <t t-esc="round.match_date"/>
-                            </span>
+
+                        <!-- Equipos y VS -->
+                        <div class="row align-items-center">
+                            <!-- Local -->
+                            <div class="col-12 col-md-4 mb-3 mb-md-0">
+                                <h5 class="mb-1 text-dark font-weight-bold">
+                                    <t t-esc="round.home_team_id[1]"/>
+                                </h5>
+                                <small class="text-muted d-block mb-2">
+                                    Rank: <t t-esc="round.home_team_rank"/> | Pts: <t t-esc="round.home_team_points"/>
+                                </small>
+
+                                <!-- Últimos partidos como local -->
+                                <div>
+                                    <t t-foreach="round.home_last_matches" t-as="match" t-key="match.date">
+                                        <span
+                                            t-attf-title="vs #{match.opponent} (#{match.game}) | #{match.goals_for}-#{match.goals_against} on #{match.date}"
+                                            data-bs-toggle="tooltip"
+                                            data-bs-placement="top"
+                                            class="mx-1"
+                                        >
+                                            <i
+                                                t-attf-class="fa fa-circle fs-5 #{match.result == 'Win' and 'text-success' or match.result == 'Loss' and 'text-danger' or 'text-info'}">
+                                            </i>
+                                        </span>
+                                    </t>
+                                </div>
+                            </div>
+
+                            <!-- VS -->
+                            <div class="col-12 col-md-4 my-2 my-md-0">
+                                <span class="fs-3 text-muted">VS</span>
+                            </div>
+
+                            <!-- Visitante -->
+                            <div class="col-12 col-md-4 mb-3 mb-md-0">
+                                <h5 class="mb-1 text-dark font-weight-bold">
+                                    <t t-esc="round.away_team_id[1]"/>
+                                </h5>
+                                <small class="text-muted d-block mb-2">
+                                    Rank: <t t-esc="round.away_team_rank"/> | Pts: <t t-esc="round.away_team_points"/>
+                                </small>
+
+                                <!-- Últimos partidos como visitante -->
+                                <div>
+                                    <t t-foreach="round.away_last_matches" t-as="match" t-key="match.date">
+                                        <span
+                                            t-attf-title="vs #{match.opponent} (#{match.game}) | #{match.goals_for}-#{match.goals_against} on #{match.date}"
+                                            data-bs-toggle="tooltip"
+                                            data-bs-placement="top"
+                                            class="mx-1"
+                                        >
+                                            <i
+                                                t-attf-class="fa fa-circle fs-5 #{match.result == 'Win' and 'text-success' or match.result == 'Loss' and 'text-danger' or 'text-info'}">
+                                            </i>
+                                        </span>
+                                    </t>
+                                </div>
+                            </div>
                         </div>
-                    </div>
 
-                    <!-- Equipos y VS -->
-                    <div class="row align-items-center">
-                        <!-- Local -->
-                        <div class="col-12 col-md-4 mb-3 mb-md-0">
-                            <h5 class="mb-1 text-dark font-weight-bold">
-                                <t t-esc="round.home_team_id[1]"/>
-                            </h5>
-                            <small class="text-muted d-block mb-2">
-                                Rank: <t t-esc="round.home_team_rank"/> | Pts: <t t-esc="round.home_team_points"/>
-                            </small>
-
-                            <!-- Últimos partidos como local -->
-                            <div>
-                                <t t-foreach="round.home_last_matches" t-as="match" t-key="match.date">
-                                    <span
-                                        t-attf-title="vs #{match.opponent} (#{match.game}) | #{match.goals_for}-#{match.goals_against} on #{match.date}"
-                                        data-bs-toggle="tooltip"
-                                        data-bs-placement="top"
-                                        class="mx-1"
-                                    >
-                                        <i
-                                            t-attf-class="fa fa-circle fs-5 #{match.result == 'Win' and 'text-success' or match.result == 'Loss' and 'text-danger' or 'text-info'}">
-                                        </i>
-                                    </span>
+                        <!-- Footer: Fixture ID -->
+                        <div class="text-right mt-4">
+                            <div class="d-flex flex-wrap justify-content-start text-muted small gap-4 align-items-center">
+                                <div>
+                                    <i class="fa fa-hashtag me-1"></i>
+                                    Fixture ID: <t t-esc="round.fixture_api_id"/>
+                                </div>
+                                <div>
+                                    <i class="fa fa-user me-1"></i>
+                                    Referee: <t t-esc="round.referee"/>
+                                </div>
+                                <t t-if="round.prediction">
+                                    <div>
+                                        <i class="fa fa-comment text-warning me-1"></i>
+                                        <span class="text-dark"><t t-esc="round.prediction.advice"/></span>
+                                    </div>
+                                    <div>
+                                        <i class="fa fa-trophy text-success me-1"></i>
+                                        <span class="text-dark"><t t-esc="round.prediction.winner"/></span>
+                                    </div>
+                                </t>
+                                <t t-else="not round.prediction">
+                                    <div>
+                                        <i class="fa fa-remove text-danger me-1"></i>
+                                        <span class="text-dark">
+                                            No prediction
+                                        </span>
+                                    </div>
                                 </t>
                             </div>
-                        </div>
-
-                        <!-- VS -->
-                        <div class="col-12 col-md-4 my-2 my-md-0">
-                            <span class="fs-3 text-muted">VS</span>
-                        </div>
-
-                        <!-- Visitante -->
-                        <div class="col-12 col-md-4 mb-3 mb-md-0">
-                            <h5 class="mb-1 text-dark font-weight-bold">
-                                <t t-esc="round.away_team_id[1]"/>
-                            </h5>
-                            <small class="text-muted d-block mb-2">
-                                Rank: <t t-esc="round.away_team_rank"/> | Pts: <t t-esc="round.away_team_points"/>
-                            </small>
-
-                            <!-- Últimos partidos como visitante -->
-                            <div>
-                                <t t-foreach="round.away_last_matches" t-as="match" t-key="match.date">
-                                    <span
-                                        t-attf-title="vs #{match.opponent} (#{match.game}) | #{match.goals_for}-#{match.goals_against} on #{match.date}"
-                                        data-bs-toggle="tooltip"
-                                        data-bs-placement="top"
-                                        class="mx-1"
-                                    >
-                                        <i
-                                            t-attf-class="fa fa-circle fs-5 #{match.result == 'Win' and 'text-success' or match.result == 'Loss' and 'text-danger' or 'text-info'}">
-                                        </i>
-                                    </span>
-                                </t>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Footer: Fixture ID -->
-                    <div class="text-right mt-4">
-                        <div class="d-flex flex-wrap justify-content-start text-muted small gap-4 align-items-center">
-                            <div>
-                                <i class="fa fa-hashtag me-1"></i>
-                                Fixture ID: <t t-esc="round.fixture_api_id"/>
-                            </div>
-                            <div>
-                                <i class="fa fa-user me-1"></i>
-                                Referee: <t t-esc="round.referee"/>
-                            </div>
-                            <t t-if="round.prediction">
-                                <div>
-                                    <i class="fa fa-comment text-warning me-1"></i>
-                                    <span class="text-dark"><t t-esc="round.prediction.advice"/></span>
-                                </div>
-                                <div>
-                                    <i class="fa fa-trophy text-success me-1"></i>
-                                    <span class="text-dark"><t t-esc="round.prediction.winner"/></span>
-                                </div>
-                            </t>
-                            <t t-else="not round.prediction">
-                                <div>
-                                    <i class="fa fa-remove text-danger me-1"></i>
-                                    <span class="text-dark">
-                                        No prediction
-                                    </span>
-                                </div>
-                            </t>
                         </div>
                     </div>
                 </div>
-            </div>
             </t>
         </div>
     </t>

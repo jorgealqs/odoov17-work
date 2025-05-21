@@ -1,5 +1,5 @@
 import logging
-from odoo import models, fields
+from odoo import models, fields  # type: ignore
 from .api_football_connector import APIFootballConnector
 from datetime import datetime
 
@@ -96,7 +96,10 @@ class SportsTrackFixture(models.Model):
 
             # Si alguno no existe, no creamos el fixture
             if not home_team_id or not away_team_id:
-                _logger.warning(f"Fixture omitido: home_team_id={home_team_id}, away_team_id={away_team_id}")
+                _logger.warning(
+                    f"Fixture omitido: home_team_id={home_team_id}, "
+                    f"away_team_id={away_team_id}"
+                )
                 continue
 
             vals_fixture = {

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Tree View -->
+    <record id="view_sports_track_bet_type_tree" model="ir.ui.view">
+        <field name="name">sports.track.bet.type.tree</field>
+        <field name="model">sports.track.bet.type</field>
+        <field name="arch" type="xml">
+            <tree string="Bets" editable="top">
+                <field name="name"/>
+                <field name="description"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_sports_track_bet_type" model="ir.actions.act_window">
+        <field name="name">Track Bet Type</field>
+        <field name="res_model">sports.track.bet.type</field>
+        <field name="view_mode">tree</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Creame to firts type.
+            </p>
+        </field>
+    </record>
+
+    <!-- Menu Item -->
+    <menuitem
+        id="menu_sports_track_bet_type_root"
+        name="Bet types"
+        parent="sports_data_sync.menu_sports_track_bet_configuration"
+        action="action_sports_track_bet_type"
+        sequence="20"
+    />
+
+</odoo>

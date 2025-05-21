@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <!-- Form View -->
+    <record id="view_sports_track_bookmaker_form" model="ir.ui.view">
+        <field name="name">sports.track.bookmaker.form</field>
+        <field name="model">sports.track.bookmaker</field>
+        <field name="arch" type="xml">
+            <form string="Bookmaker">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="website"/>
+                        <field name="country"/>
+                        <field name="active"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Tree View -->
+    <record id="view_sports_track_bookmaker_tree" model="ir.ui.view">
+        <field name="name">sports.track.bookmaker.tree</field>
+        <field name="model">sports.track.bookmaker</field>
+        <field name="arch" type="xml">
+            <tree string="Bookmaker">
+                <field name="name"/>
+                <field name="website" widget="url"/>
+                <field name="country"/>
+                <field name="active" widget="boolean_toggle"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_sports_track_bookmaker" model="ir.actions.act_window">
+        <field name="name">Bookmaker</field>
+        <field name="res_model">sports.track.bookmaker</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new bookmaker.
+            </p>
+        </field>
+    </record>
+
+
+    <!-- Menu Item -->
+    <menuitem
+        id="menu_sports_track_bet_configuration"
+        name="Configuration"
+        parent="sports_data_sync.sports_menu_root"
+        sequence="30"
+    />
+
+    <menuitem
+        id="menu_sports_track_configuration"
+        name="Bookmarker"
+        parent="sports_data_sync.menu_sports_track_bet_configuration"
+        action="action_sports_track_bookmaker"
+        sequence="10"
+    />
+
+</odoo>

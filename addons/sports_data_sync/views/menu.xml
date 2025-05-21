@@ -1,5 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <odoo>
+
     <menuitem id="sports_menu_root" name="Sport" sequence="10"/>
-    <menuitem id="sports_first_level_menu" name="Panel Principal" parent="sports_menu_root" sequence="10"/>
+    <menuitem id="sports_first_level_menu" name="Dashboard" parent="sports_menu_root" sequence="10" action="dashboard_sports_sync_data_action"/>
+
 </odoo>
