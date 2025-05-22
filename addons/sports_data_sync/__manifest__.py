@@ -28,6 +28,8 @@ Además de mostrar estadísticas y generar pronósticos
         'views/menu.xml',
         "data/data_session.xml",
         "data/sync_predictions.xml",
+        "data/cron_bets.xml",
+        "data/sequence.xml",
         'views/dashboard.xml',
         'views/country_views.xml',
         'views/league_views.xml',

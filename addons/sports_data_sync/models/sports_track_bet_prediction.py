@@ -21,11 +21,8 @@ class SportsTrackBetPrediction(models.Model):
     )
     odds = fields.Float(string='Odds')
     date = fields.Date(string="Prediction Date", default=fields.Date.today)
-    bet_type_ids = fields.Many2many(
+    bet_type_id = fields.Many2one(
         'sports.track.bet.type',
-        'sports_bet_prediction_type_rel',
-        'prediction_id',
-        'bet_type_id',
         string='Bet Types'
     )
     result = fields.Selection([

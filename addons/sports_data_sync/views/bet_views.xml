@@ -1,5 +1,91 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
+
+    <record id="view_sports_track_bet_kanban" model="ir.ui.view">
+        <field name="name">sports.track.bet.kanban</field>
+        <field name="model">sports.track.bet</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_example" default_group_by="bookmaker_id">
+                <field name="reference"/>
+                <field name="bookmaker_id"/>
+                <field name="stake"/>
+                <field name="payout"/>
+                <field name="result"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_card oe_kanban_global_click shadow-sm border-0 my-2 rounded-3 position-relative" style="min-height: 140px;">
+                            <!-- Franja de color -->
+                            <t t-set="color_class">
+                                <t t-if="record.result.raw_value == 'won'">bg-success</t>
+                                <t t-elif="record.result.raw_value == 'lost'">bg-danger</t>
+                                <t t-elif="record.result.raw_value == 'pending'">bg-warning</t>
+                                <t t-else="">bg-secondary</t>
+                            </t>
+                            <div t-attf-class="card-header p-0 {{ color_class }}" style="height: 4px; border-top-left-radius: .5rem; border-top-right-radius: .5rem;"></div>
+
+                            <div class="card-body py-3 px-3">
+                                <div class="d-flex justify-content-between align-items-start mb-3">
+                                    <div>
+                                        <div class="text-muted small mb-1">Reference</div>
+                                        <div class="fw-bold fs-6"><field name="reference"/></div>
+                                    </div>
+                                    <div class="text-end">
+                                        <t t-set="badge_class">
+                                            <t t-if="record.result.raw_value == 'won'">text-success</t>
+                                            <t t-elif="record.result.raw_value == 'lost'">text-danger</t>
+                                            <t t-elif="record.result.raw_value == 'pending'">text-warning</t>
+                                            <t t-else="">text-muted</t>
+                                        </t>
+                                        <span t-attf-class="fw-bold small {{ badge_class }}">
+                                            <i t-if="record.result.raw_value == 'won'" class="bi bi-check-circle-fill me-1"></i>
+                                            <i t-if="record.result.raw_value == 'lost'" class="bi bi-x-circle-fill me-1"></i>
+                                            <i t-if="record.result.raw_value == 'pending'" class="bi bi-hourglass-split me-1"></i>
+                                            <field name="result"/>
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div class="mb-2">
+                                    <div class="text-muted small">Stake</div>
+                                    <div class="fw-semibold"><field name="stake"/></div>
+                                </div>
+                                <div class="mb-2">
+                                    <div class="text-muted small">Payout</div>
+                                    <div class="fw-semibold"><field name="payout"/></div>
+                                </div>
+                                <div>
+                                    <div class="text-muted small">Bookmaker</div>
+                                    <div class="fw-medium"><field name="bookmaker_id"/></div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="view_sports_track_bet_search" model="ir.ui.view">
+        <field name="name">sports.track.bet.search</field>
+        <field name="model">sports.track.bet</field>
+        <field name="arch" type="xml">
+            <search string="Search Bets">
+                <field name="reference"/>
+                <field name="bookmaker_id"/>
+                <field name="result"/>
+
+                <filter string="Pending" name="filter_pending" domain="[('result', '=', 'pending')]" help="Only show pending bets"/>
+                <filter string="Won" name="filter_won" domain="[('result', '=', 'won')]" help="Only show bets that were won"/>
+                <filter string="Lost" name="filter_lost" domain="[('result', '=', 'lost')]" help="Only show bets that were lost"/>
+
+                <group expand="0" string="Group By">
+                    <filter string="Bookmaker" name="group_by_bookmaker" context="{'group_by': 'bookmaker_id'}"/>
+                    <filter string="Result" name="group_by_result" context="{'group_by': 'result'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
     <!-- Form View -->
     <record id="view_sports_track_bet_form" model="ir.ui.view">
         <field name="name">sports.track.bet.form</field>
@@ -7,35 +93,44 @@
         <field name="arch" type="xml">
             <form string="Bet Tracking">
                 <header>
-                    <field name="result" widget="statusbar" statusbar_visible="pending,won,lost"/>
+                    <button name="action_won" type="object" string="Won" class="btn-success" invisible="result != 'pending'"/>
+                    <button name="action_lost" type="object" string="Lost" class="btn-danger" invisible="result != 'pending'"/>
+                    <field name="result" widget="statusbar" statusbar_visible="won,lost"/>
+                    <!-- <field name="result" widget="statusbar" statusbar_visible="pending,won,lost" options="{'clickable': '1'}"/> -->
                 </header>
                 <sheet>
+                    <widget name="web_ribbon" title="Lost" bg_color="text-bg-danger" invisible="result != 'lost'"/>
+                    <widget name="web_ribbon" title="Won" invisible="result != 'won'"/>
                     <div class="oe_title">
                         <h1>
-                            <field name="name" placeholder="Bet Description"/>
+                            <field name="reference" readonly="True"/>
                         </h1>
                     </div>
                     <group>
-                        <field name="bettor_id"/>
-                        <field name="bookmaker_id"/>
-                        <field name="stake"/>
+                        <field name="bettor_id" invisible="1"/>
+                        <field name="bookmaker_id" readonly="result != 'pending'" />
+                        <field name="stake" readonly="result != 'pending'" />
                         <field name="payout" readonly="1"/>
                     </group>
 
                     <notebook>
                         <page string="Predictions">
-                            <field name="prediction_ids">
-                                <tree editable="bottom">
+                            <field name="prediction_ids" readonly="result in ('lost', 'won')">
+                                <tree editable="bottom" decoration-success="result == 'won'" decoration-danger="result == 'lost'" decoration-it="result == 'pending'">
                                     <field name="fixture_id"/>
                                     <field name="odds"/>
-                                    <field name="bet_type_ids" widget="many2many_tags"/>
+                                    <field name="bet_type_id"/>
                                     <field name="date"/>
-                                    <field name="result" readonly="true" />
+                                    <field name="result" invisible="1" string=""/>
                                 </tree>
                             </field>
                         </page>
                     </notebook>
                 </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
             </form>
         </field>
     </record>
@@ -45,12 +140,13 @@
         <field name="name">sports.track.bet.tree</field>
         <field name="model">sports.track.bet</field>
         <field name="arch" type="xml">
-            <tree string="Bets">
-                <field name="name"/>
+            <tree string="Bets" decoration-bf="result in ('won', 'lost')" decoration-success="result == 'won'" decoration-danger="result == 'lost'" decoration-muted="result == 'pending'">
+                <field name="reference"/>
                 <field name="bookmaker_id"/>
                 <field name="stake"/>
-                <field name="result"/>
                 <field name="payout"/>
+                <field name="result"/>
+                <field name="create_date"/>
             </tree>
         </field>
     </record>
@@ -59,7 +155,8 @@
     <record id="action_sports_track_bet" model="ir.actions.act_window">
         <field name="name">Track Bets</field>
         <field name="res_model">sports.track.bet</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="domain">[('bettor_id', '=', uid)]</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
                 Track your sports bets here.

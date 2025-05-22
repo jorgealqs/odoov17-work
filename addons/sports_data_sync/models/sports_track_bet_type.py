@@ -15,3 +15,7 @@ class SportsTrackBetType(models.Model):
     _sql_constraints = [
         ('name_uniq', 'unique(name)', 'The name must be unique.')
     ]
+
+    def _compute_display_name(self):
+        for rec in self:
+            rec.display_name = f"[{rec.name}] {rec.description}"

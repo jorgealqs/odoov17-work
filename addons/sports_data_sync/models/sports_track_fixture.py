@@ -10,6 +10,9 @@ class SportsTrackFixture(models.Model):
     _name = 'sports.track.fixture'
     _description = 'Football Track Fixtures'
     _rec_name = 'fixture_api_id'
+    _rec_names_search = [
+        'fixture_api_id', 'home_team_id.name', 'away_team_id.name'
+    ]
 
     country_id = fields.Many2one(
         'sports.track.country',
@@ -175,3 +178,10 @@ class SportsTrackFixture(models.Model):
         except ValueError as e:
             _logger.error(f"Error parsing date: {e}")
             return None
+
+    def _compute_display_name(self):
+        for rec in self:
+            rec.display_name = (
+                f"[{rec.fixture_api_id}] {rec.home_team_id.name} vs "
+                f"{rec.away_team_id.name} [{rec.country_id.country_code}]"
+            )
