@@ -1,4 +1,4 @@
-from odoo import models, api
+from odoo import models, api  # type: ignore
 import logging
 from .lottery_constants import (
     SEARCH_BALOTO,

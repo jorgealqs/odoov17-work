@@ -1,6 +1,6 @@
-from odoo import models, api
-import requests
-from bs4 import BeautifulSoup
+from odoo import models, api  # type: ignore
+import requests  # type: ignore
+from bs4 import BeautifulSoup  # type: ignore
 import logging
 from .lottery_constants import HEADERS, URLS  # 👈 importas las URLs
 import re
@@ -15,43 +15,20 @@ class LotteryImporterMiloto(models.AbstractModel):
 
     @api.model
     def run_import(self, game):
-        url = game.website
-        try:
-            response = requests.get(url, headers=HEADERS, timeout=10)
-            response.raise_for_status()
-            soup = BeautifulSoup(response.content, 'html.parser')
-            # 🔍 Buscar el div que contiene fecha y sorteo
-            container = soup.find('div', class_='container-how-play')
-            if not container:
-                _logger.warning(
-                    "⚠️ No se encontró el contenedor "
-                    "con la clase 'container-how-play'"
-                )
-                return
-            date_text = container.find_all('div')[0].get_text(strip=True)
-            draw_text = container.find_all('div')[1].get_text(strip=True)
-            _logger.info(f"\n\n📅 Fecha encontrada: {date_text}\n\n")
-            _logger.info(f"\n\n🎟️ Sorteo encontrado: {draw_text}\n\n")
-            # Ejemplo: extraer el número desde "SORTEO #306"
-            draw_number = None
-            if 'SORTEO #' in draw_text:
-                draw_number = int(draw_text.replace('SORTEO #', '').strip())
-                _logger.info(f"\n\n🔢 Número de sorteo: {draw_number}\n\n")
-                data = {
-                    'date_text': date_text,
-                    'draw_number': draw_number,
-                    'game': game,
-                }
-                self._get_data(**data)
-        except requests.exceptions.HTTPError as http_err:
-            _logger.error(f"❌ Error HTTP al acceder a {url}: {http_err}")
-            return
-        except requests.exceptions.RequestException as req_err:
-            _logger.error(f"❌ Error de conexión al acceder a {url}: {req_err}")
-            return
+        latest_draw = self.env['lottery.draw'].search(
+            [("game_id", "=", game.id)],
+            order='draw_number desc',
+            limit=1
+        )
+        draw_number = latest_draw.draw_number if latest_draw else 0
+
+        data = {
+            'draw_number': int(draw_number) + 1,
+            'game': game,
+        }
+        self._get_data(**data)
 
     def _get_data(self, *args, **kwargs):
-        date_text = kwargs.get('date_text')
         draw_number = kwargs.get('draw_number')
         url = f"{URLS['miloto']}/{draw_number}"
         try:
@@ -66,9 +43,10 @@ class LotteryImporterMiloto(models.AbstractModel):
             ]
             winning_info = self._extract_winning_info(soup)
             extract_acumulado = self._extract_acumulado(soup)
+            date_div = soup.find('div', class_='fs-5')
+            date_text = date_div.get_text(strip=True) if date_div else None
             _logger.info(
-                f"\n\n\n\n {winning_numbers} {winning_info} "
-                f"{extract_acumulado} \n\n"
+                f"\n\n\n {date_text} \n\n"
             )
             draw_date = self._parse_draw_date(date_text)
             draw = self.env['lottery.draw'].create({
@@ -163,9 +141,10 @@ class LotteryImporterMiloto(models.AbstractModel):
             'Noviembre': 'November',
             'Diciembre': 'December'
         }
-        partes = texto_fecha.split(' ', 1)[1]
+
         for es, en in meses.items():
-            if es in partes:
-                partes = partes.replace(es, en)
+            if es in texto_fecha:
+                texto_fecha = texto_fecha.replace(es, en)
                 break
-        return datetime.strptime(partes, "%d de %B de %Y").date()
+
+        return datetime.strptime(texto_fecha, "%d de %B de %Y").date()
