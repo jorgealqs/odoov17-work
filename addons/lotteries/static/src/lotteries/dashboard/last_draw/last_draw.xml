@@ -4,19 +4,30 @@
         <div class="o_dashboard_draws" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; cursor:pointer;">
             <t t-foreach="Object.entries(props.lastDraw)" t-as="pair" t-key="pair[0]">
                 <t t-set="draw" t-value="pair[1]" />
-                <div class="draw-card" t-att-style="`background-color: ${draw.winner ? '#aaeaa9' : '#fff'}; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); padding: 1rem; text-align: center;`"
-                t-on-click="onClickGame" t-att-data-id="draw.name_id" t-att-data-lottery="draw.name">
-                    <h3 class="draw-title" style="margin-bottom: 0.5rem; font-size: 1.2rem; color: #2c3e50;">
-                        🎯 <t t-esc="draw.name" /> <!-- Esto debería mostrar el nombre del juego correctamente -->
-                    </h3>
-                    <p style="margin: 0; color: #7f8c8d; font-size: 0.9rem;">
-                        Sorteo: <strong><t t-esc="draw.draw_date" /></strong>
+                <div class="draw-card"
+                    t-att-style="`background-color: ${draw.winner ? '#aaeaa9' : '#fff'}; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); padding: 1rem; text-align: center;`"
+                    t-on-click="onClickGame"
+                    t-att-data-id="draw.name_id"
+                    t-att-data-lottery="draw.name">
+
+                    <!-- Título con nombre y fecha -->
+                    <div style="margin-bottom: 0.5rem; font-size: 1.1rem; color: #2c3e50;">
+                        <strong>🎯 <t t-esc="draw.name" /></strong>
+                        <span style="color: #7f8c8d; font-size: 0.85rem; margin-left: 6px;">
+                            (<t t-esc="draw.draw_date" />)
+                        </span>
+                    </div>
+
+                    <!-- Pozo -->
+                    <p t-if="draw.jackpot" style="margin: 0; color: #27ae60; font-weight: bold; font-size: 0.95rem;">
+                        💰 Pozo: <t t-esc="draw.jackpot" />
                     </p>
-                    <!-- Números con color -->
+
+                    <!-- Números -->
                     <div class="draw-numbers mt-2 d-flex justify-content-center flex-wrap gap-2">
-                        <t t-set="index" t-value="0"/>  <!-- Inicializa un contador -->
+                        <t t-set="index" t-value="0"/>
                         <t t-foreach="draw.numbers" t-as="num" t-key="'key_' + num.number + '-' + num.color + '-' + index">
-                            <t t-set="index" t-value="index + 1"/>  <!-- Incrementa el contador -->
+                            <t t-set="index" t-value="index + 1"/>
                             <div t-attf-class="round-lotto-{{num.color}} d-inline-flex justify-content-center align-items-center fw-bold" class="round-lotto">
                                 <t t-esc="num.number" />
                             </div>

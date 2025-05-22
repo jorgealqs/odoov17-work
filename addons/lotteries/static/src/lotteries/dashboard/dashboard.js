@@ -20,6 +20,7 @@ class DashboardGames extends Component {
             controlPanel: {},
         };
         this.statistics = useState(useService("lotteries.statistics"));
+        console.log(this.statistics)
     }
 
     openLotteriesDraws(){

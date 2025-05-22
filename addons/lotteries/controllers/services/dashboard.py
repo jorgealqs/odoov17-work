@@ -51,6 +51,7 @@ def get_last_raws(limit_per_game=1):
                 'draw_date': draw.draw_date,
                 'name': game.name,
                 'name_id': game.id,
+                'jackpot': draw.jackpot,
                 'numbers': [{
                     'number': n.number,
                     'color': n.color
