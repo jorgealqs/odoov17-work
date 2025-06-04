@@ -1,0 +1,31 @@
+<odoo>
+    <!-- Tree View -->
+    <record id="view_english_phrase_tree" model="ir.ui.view">
+        <field name="name">english.phrase.tree</field>
+        <field name="model">english.phrase</field>
+        <field name="arch" type="xml">
+            <tree string="Phrases" editable="top" sample="1" multi_edit="1">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="context"/>
+                <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_english_phrase" model="ir.actions.act_window">
+        <field name="name">English Phrases</field>
+        <field name="res_model">english.phrase</field>
+        <field name="view_mode">tree</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                <i class="fa fa-tag"/> Create a new phrase.
+            </p>
+        </field>
+    </record>
+
+    <!-- This Menu Item must have a parent and an action -->
+    <menuitem id="english_phrase_menu_act" name="Phrases" parent="menu_english_learning_dictionary" action="action_english_phrase" sequence="15"/>
+
+</odoo>

@@ -1,4 +1,4 @@
-from odoo import models, fields
+from odoo import models, fields  # type: ignore
 import logging
 
 _logger = logging.getLogger(__name__)
@@ -35,4 +35,4 @@ class EnglishDictionary(models.Model):
     ]
 
     def send_telegram(self):
-        _logger.info(f"\n\n Llegaste \n")
+        _logger.info("\n\n Llegaste \n")
