@@ -25,7 +25,6 @@ Además de mostrar estadísticas y generar pronósticos
     ],
     'data': [
         'security/ir.model.access.csv',
-        'views/menu.xml',
         "data/data_session.xml",
         "data/sync_predictions.xml",
         "data/cron_bets.xml",
@@ -35,10 +34,11 @@ Además de mostrar estadísticas y generar pronósticos
         'views/league_views.xml',
         'views/team_views.xml',
         'views/standing_views.xml',
+        'views/fixture_views.xml',
+        'views/menu.xml',
         'views/bet_views.xml',
         'views/bookmaker_views.xml',
         'views/bet_type_views.xml',
-        'views/fixture_views.xml',
     ],
     'images': ['static/description/banner.png'],
     'assets': {
